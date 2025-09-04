@@ -5,7 +5,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleGoToProfile = () => {
-    localStorage.removeItem("isLoggedIn");
+    // localStorage.removeItem("isLoggedIn");
     navigate("/profile");
   };
 
