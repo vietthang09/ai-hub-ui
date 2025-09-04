@@ -13,8 +13,9 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === "a" && password === "123") {
+    if (email === "thu thao" && password === "123") {
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("user", JSON.stringify({ email }));
       navigate(from, { replace: true });
     } else {
       alert("Invalid email or password!");
@@ -34,16 +35,16 @@ export default function Login() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full mb-2"
+          className=" p-2 w-full mb-2"
         />
         <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full mb-2"
+          className=" p-2 w-full mb-2"
         />
-        <Button type="submit" className="bg-gray-300 px-4 py-2 rounded w-full">
+        <Button type="submit" className=" px-4 py-2 rounded w-full">
           Login
         </Button>
       </form>

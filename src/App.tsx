@@ -3,32 +3,35 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import RouteGuard from "./routes/ProtectedRoute";
 import Profile from "./pages/Profile";
+import { AuthProvider } from "./context/auth-context";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Guest routes */}
-        <Route
-          path="/login"
-          element={
-            <RouteGuard type="guest">
-              <Login />
-            </RouteGuard>
-          }
-        />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Guest routes */}
+          <Route
+            path="/login"
+            element={
+              <RouteGuard type="guest">
+                <Login />
+              </RouteGuard>
+            }
+          />
 
-        {/* Protected routes */}
-        <Route element={<RouteGuard type="protected" />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
+          {/* Protected routes */}
+          <Route element={<RouteGuard type="protected" />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
 
-        {/* fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
