@@ -1,19 +1,29 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import ProtectedRoute from "./routes/ProtectedRoute";
+import RouteGuard from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {/* Guest routes */}
+        <Route
+          path="/login"
+          element={
+            <RouteGuard type="guest">
+              <Login />
+            </RouteGuard>
+          }
+        />
 
-        <Route element={<ProtectedRoute />}>
+        {/* Protected routes */}
+        <Route element={<RouteGuard type="protected" />}>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
         </Route>
 
+        {/* fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
