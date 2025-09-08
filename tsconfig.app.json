@@ -6,11 +6,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
+    
+    
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -29,4 +26,5 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src"]
+  
 }
