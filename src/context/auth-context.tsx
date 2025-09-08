@@ -55,7 +55,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoggedIn(true);
       localStorage.setItem("user", JSON.stringify(data));
 
-      toast.success(`Welcome back, ${data.email}!`); // ✅ toast ở đây
       return true;
     } catch (err: any) {
       if (err.response?.data?.error) toast.error(err.response.data.error);

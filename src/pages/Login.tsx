@@ -18,8 +18,7 @@ export default function Login() {
     e.preventDefault();
     const success = await login(email, password);
     if (success) {
-      // toast.success(`Welcome back, ${email}!`);
-      navigate(from, { replace: true });
+      navigate(from, { replace: true, state: { justLoggedIn: true } });
     } else {
       toast.error("Network error. Check console.");
     }
