@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import RouteGuard from "./routes/ProtectedRoute";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./context/auth-context";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -16,6 +17,15 @@ function App() {
             element={
               <RouteGuard type="guest">
                 <Login />
+              </RouteGuard>
+            }
+          />
+
+          <Route
+            path="/register"
+            element={
+              <RouteGuard type="guest">
+                <Register />
               </RouteGuard>
             }
           />

@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../context/auth-context";
 
 interface RouteGuardProps {
   type: "protected" | "guest";
@@ -8,7 +9,10 @@ interface RouteGuardProps {
 
 export default function RouteGuard({ type, children }: RouteGuardProps) {
   const location = useLocation();
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const { isLoggedIn } = useAuth();
+  const { loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
 
   // Guard for protected routes
   if (type === "protected") {

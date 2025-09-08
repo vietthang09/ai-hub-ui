@@ -10,7 +10,7 @@ export default function Profile() {
 
       <div className="flex flex-col h-screen items-center justify-center space-y-4">
         <h1 className="text-3xl font-bold">Profile Page</h1>
-        {user && <p className="text-lg">Welcome, {user.email}</p>}
+        {user && <p className="text-lg">Welcome, {user.role}</p>}
       </div>
     </div>
   );
