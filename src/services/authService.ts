@@ -1,11 +1,12 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.1.130:5000";
+const BASE_URL = import.meta.env.VITE_BASE_URL; 
 
 export interface User {
   email: string;
   role: string;
 }
+
 
 export interface RegisterResponse {
   message: string;
@@ -16,7 +17,7 @@ export const loginService = async (
   email: string,
   password: string
 ): Promise<User> => {
-  const { data } = await axios.post<User>(`${API_URL}/login`, {
+  const { data } = await axios.post<User>(`${BASE_URL}/login`, {
     email,
     password,
   });
@@ -28,8 +29,8 @@ export const registerSevice = async (
   password: string
  ): Promise<RegisterResponse> => {
   const { data } = await axios.post<RegisterResponse>(
-    `${API_URL}/register`,
-    { email, password, name }
+    `${BASE_URL}/register`,
+    { email, password }
   );
   return data;
 };
