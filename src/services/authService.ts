@@ -1,23 +1,26 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL; 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export interface User {
   email: string;
   role: string;
+  message: string;
+  access_token: string;
+  refresh_token: string;
 }
 
-
 export interface RegisterResponse {
+  role: string;
   message: string;
-  user?: User; 
+  user?: User;
 }
 
 export const loginService = async (
   email: string,
   password: string
 ): Promise<User> => {
-  const { data } = await axios.post<User>(`${BASE_URL}/login`, {
+  const { data } = await axiosInstance.post<User>(`${BASE_URL}/login`, {
     email,
     password,
   });
@@ -27,8 +30,8 @@ export const loginService = async (
 export const registerSevice = async (
   email: string,
   password: string
- ): Promise<RegisterResponse> => {
-  const { data } = await axios.post<RegisterResponse>(
+): Promise<RegisterResponse> => {
+  const { data } = await axiosInstance.post<RegisterResponse>(
     `${BASE_URL}/register`,
     { email, password }
   );
