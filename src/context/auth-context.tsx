@@ -12,9 +12,11 @@ import {
   registerSevice,
   type User,
 } from "../services/authService";
+import { setAuthTokens, setLogoutHandler } from "../services/axiosInstance";
 
 interface AuthContextType {
   user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isLoggedIn: boolean;
   register: (email: string, password: string) => Promise<boolean>;
   login: (email: string, password: string) => Promise<boolean>;
@@ -36,8 +38,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
+      const parsedUser = JSON.parse(storedUser) as User;
+
       setUser(JSON.parse(storedUser));
       setIsLoggedIn(true);
+      setAuthTokens(parsedUser.access_token, parsedUser.refresh_token);
     }
     setLoading(false);
   }, []);
@@ -51,9 +56,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const data = await loginService(email.trim(), password.trim());
 
-      setUser(data);
+      const userData: User = {
+        role: data.role,
+        email,
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        message: data.message,
+      };
+
+      setUser(userData);
       setIsLoggedIn(true);
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      setAuthTokens(userData.access_token, userData.refresh_token);
 
       return true;
     } catch (err: any) {
@@ -85,13 +100,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("user");
     setUser(null);
     setIsLoggedIn(false);
-    toast.success("Logged out!");
+    toast.success("Logged out ");
+    setAuthTokens(null, null);
   };
+
+  setLogoutHandler(logout);
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         isLoggedIn,
         login,
         register,

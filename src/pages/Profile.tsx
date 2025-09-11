@@ -1,9 +1,23 @@
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useAuth } from "../context/auth-context";
+import { getUserService } from "../services/userService";
+import type { User } from "../services/types";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const [user, setUser] = useState<User>();
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getUserService();
+        setUser(res);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUser();
+  }, []);
   return (
     <div className="h-screen flex flex-col">
       <Navbar />
