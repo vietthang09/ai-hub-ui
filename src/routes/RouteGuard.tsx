@@ -1,7 +1,6 @@
 import type { JSX } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import type { RootState } from "../store";
+import { useAuthStore } from "../store/authStore";
 
 interface RouteGuardProps {
   type: "protected" | "guest";
@@ -10,9 +9,7 @@ interface RouteGuardProps {
 
 export default function RouteGuard({ type, children }: RouteGuardProps) {
   const location = useLocation();
-  const { authUser, loading } = useSelector((state: RootState) => state.auth);
-
-  if (loading) return <div>Loading...</div>;
+  const { authUser } = useAuthStore();
 
   // Guard cho route protected
   if (type === "protected") {

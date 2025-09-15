@@ -11,6 +11,9 @@ export default function Navbar() {
         <Link to="/profile" className="hover:underline">
           Profile
         </Link>
+        <Link to="/usertable" className="hover:underline">
+          User
+        </Link>
       </div>
       <LogoutButton />
     </nav>

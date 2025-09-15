@@ -1,35 +1,46 @@
-export const validateEmail = (email: string): string => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email.trim()) return "Email is required";
-  if (!emailRegex.test(email)) return "Invalid email format";
-  return "";
-};
+import { z } from "zod";
 
-export const validatePassword = (password: string): string => {
-  if (!password.trim()) return "Password is required";
-  if (password.length < 3) return "Password must be at least 6 characters";
-  return "";
-};
+export const loginSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .refine((val) => /^\S+@\S+\.\S+$/.test(val), {
+      message: "Invalid email format",
+    }),
+  password: z
+    .string()
+    .nonempty("Password is required")
+    .min(8, "Password must be at least 8 characters"),
+});
 
-export const validateName = (name: string): string => {
-  if (!name.trim()) return "Name is required";
-  if (name.length < 2) return "Name must be at least 2 characters";
-  return "";
-};
+export const registerSchema = z.object({
+  // name: z
+  //   .string()
+  //   .nonempty("Name is required")
+  //   .min(2, "Name must be at least 2 characters"),
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .refine((val) => /^\S+@\S+\.\S+$/.test(val), {
+      message: "Invalid email format",
+    }),
+  password: z
+    .string()
+    .nonempty("Password is required")
+    .min(8, "Password must be at least 8 characters"),
+});
 
-export const validateLoginForm = (email: string, password: string) => {
-  return {
-    email: validateEmail(email),
-    password: validatePassword(password),
-  };
-};
-
-export const validateRegisterForm = (
-  email: string,
-  password: string,
- ) => {
-  return {
-     email: validateEmail(email),
-    password: validatePassword(password),
-  };
-};
+export const userSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .refine((val) => /^\S+@\S+\.\S+$/.test(val), {
+      message: "Invalid email format",
+    }),
+  password: z
+    .string()
+    .optional()
+    .refine((val) => !val || val.length >= 8, {
+      message: "Password must be at least 8 characters",
+    }),
+});
