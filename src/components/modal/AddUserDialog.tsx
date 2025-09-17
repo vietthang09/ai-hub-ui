@@ -65,14 +65,15 @@ export default function AddUserDialog({
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-4 mt-2"
+          autoComplete="off"
         >
           <div>
             <Input
               {...register("email")}
               placeholder="Email"
-              className={`w-full border rounded px-3 py-2 ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              }`}
+              autoComplete="off"
+              className={`w-full border rounded px-3 py-2 ${errors.email ? "border-red-500" : "border-gray-300"
+                }`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -85,10 +86,10 @@ export default function AddUserDialog({
             <Input
               {...register("password")}
               type="password"
+              autoComplete="new-password"
               placeholder="Password"
-              className={`w-full border rounded px-3 py-2 ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full border rounded px-3 py-2 ${errors.password ? "border-red-500" : "border-gray-300"
+                }`}
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">

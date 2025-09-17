@@ -18,17 +18,20 @@ export default function EditUserDialog({
   onSuccess: () => void;
 }) {
   const { user, setUser, setModalType, modalType } = useUserContext();
+
+  if (!user) return null;
+
   const [loading, setLoading] = useState(false);
 
   const handleUpdate = async () => {
-    if (!user.email) return;
+    if (!user) return;
     try {
       setLoading(true);
       await updateUser(user.email, { role: user.role });
       toast.success("User updated!");
       onSuccess();
       setModalType(null);
-      setUser("", "");
+      setUser(null);
     } catch {
       toast.error("Failed to update user");
     } finally {
@@ -42,7 +45,7 @@ export default function EditUserDialog({
       onOpenChange={(open) => {
         if (!open) {
           setModalType(null);
-          setUser("", "");
+          setUser(null);
         }
       }}
     >
@@ -61,7 +64,7 @@ export default function EditUserDialog({
           />
           <select
             value={user.role}
-            onChange={(e) => user.email && setUser(user.email, e.target.value)}
+            onChange={(e) => user.email && setUser({...user, role: e.target.value })}
             className="w-full border rounded px-3 py-2"
           >
             <option value="user">User</option>
@@ -77,7 +80,7 @@ export default function EditUserDialog({
             variant="outline"
             onClick={() => {
               setModalType(null);
-              setUser("", "");
+              setUser(null);
             }}
           >
             Cancel

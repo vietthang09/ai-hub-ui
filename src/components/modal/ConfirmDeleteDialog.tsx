@@ -14,7 +14,7 @@ export default function ConfirmDeleteDialog({
 
   const handleRemove = async () => {
     try {
-      if (!user.email) return; // phòng trường hợp null
+      if (!user) return;
       setLoading(true);
       await deleteUser(user.email);
       toast.success("User deleted!");
