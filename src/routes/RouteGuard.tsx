@@ -20,7 +20,7 @@ export default function RouteGuard({ type, children }: RouteGuardProps) {
     );
   }
 
-  // Guard cho route guest
+  // Guard cho route guest 
   if (type === "guest") {
     return authUser?.access_token ? (
       <Navigate to="/" replace />

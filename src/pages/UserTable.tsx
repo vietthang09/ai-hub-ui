@@ -1,96 +1,88 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { useUserContext } from "../context/user-context";
 import toast, { Toaster } from "react-hot-toast";
-import { useUserContext } from "../context/UserContext";
-import EditUserModal from "../components/modal/EditUserModal";
-import AddUserModal from "../components/modal/AddUserModal";
 import UserRow from "../components/modal/UserRow";
 import { Button } from "../components/ui/button";
-
+import SearchBar from "../components/SearchBar";
+import { getUsers, deleteUser } from "../services/userService";
+import type { User } from "../services/types";
+import AddUserDialog from "../components/modal/AddUserDialog";
+import EditUserDialog from "../components/modal/EditUserDialog";
+ 
 export default function UserTable() {
-  const {
-    users,
-    loading,
-    fetchUsers,
-    fetchUserInfo,
-    addUser,
-    editUser,
-    removeUser,
-  } = useUserContext();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [openAdd, setOpenAdd] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [editingEmail, setEditingEmail] = useState<string | null>(null);
-  const [editingRole, setEditingRole] = useState("");
+  const { modalType, setModalType, setUser } = useUserContext();
 
-  useEffect(() => {
-    Promise.all([fetchUsers(), fetchUserInfo()]).catch((err: any) => {
-      toast.error(err?.message || "Failed to init");
-    });
-  }, [fetchUsers, fetchUserInfo]);
-
-  const handleEditSave = async (role: string) => {
-    if (!editingEmail) return;
+  const fetchUsers = async () => {
+    setLoading(true);
     try {
-      await editUser(editingEmail, { role });
-      toast.success("User updated!");
-      setOpenEdit(false);
-      setEditingEmail(null);
+      const data = await getUsers();
+      setUsers(data);
     } catch (err: any) {
-      toast.error(err?.message || "Failed to update user");
+      toast.error(err?.message || "Failed to fetch users");
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const handleDelete = async (email: string) => {
     try {
-      await removeUser(email);
+      await deleteUser(email);
       toast.success("User deleted!");
+      fetchUsers();
     } catch (err: any) {
       toast.error(err?.message || "Failed to delete user");
     }
   };
 
+  const filteredUsers = users.filter(
+    (u) =>
+      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (u.role?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="h-screen flex flex-col">
+    <div className="ml-72 h-screen flex flex-col overflow-hidden bg-gray-50">
       <Toaster position="top-right" />
       <Navbar />
 
-      <div className="flex flex-col flex-1 items-center  space-y-6 p-4">
-        <h1 className="text-3xl font-bold">User List</h1>
-        <div className="flex flex-col items-start space-y-4">
-          <Button
-            className="btn btn-primary"
-            onClick={() => {
-              console.log("click add user");
-              setOpenAdd(true);
-            }}
-          >
+      <div className="flex-1 flex flex-col p-4 overflow-hidden">
+        <div className="flex justify-between items-center mb-4">
+          <SearchBar onSearch={setSearchQuery} />
+          <Button variant="secondary" onClick={() => setModalType("add")}>
             Add User
           </Button>
         </div>
 
-        <div className="w-full max-w-3xl overflow-x-auto mt-4">
+        <div className="flex-1 overflow-auto">
           {loading ? (
             <p className="text-gray-500">Loading users...</p>
-          ) : users.length > 0 ? (
-            <table className="min-w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border px-4 py-2 text-left">Email</th>
-                  <th className="border px-4 py-2 text-left">Role</th>
-                  <th className="border px-4 py-2">Actions</th>
+          ) : filteredUsers.length > 0 ? (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="border px-4 py-2 text-center">Email</th>
+                  <th className="border px-4 py-2 text-center w-40">Role</th>
+                  <th className="border px-4 py-2 text-center w-32">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((u) => (
+                {filteredUsers.map((u) => (
                   <UserRow
                     key={u.email}
                     email={u.email}
                     role={u.role || "user"}
                     onEdit={() => {
-                      setEditingEmail(u.email);
-                      setEditingRole(u.role || "user");
-                      setOpenEdit(true);
+                      setUser(u.email, u.role);
+                      setModalType("edit");
                     }}
                     onDelete={() => handleDelete(u.email)}
                   />
@@ -98,23 +90,14 @@ export default function UserTable() {
               </tbody>
             </table>
           ) : (
-            <p className="text-red-500 mt-2">No users found</p>
+            <p className="text-red-500">No users found</p>
           )}
         </div>
       </div>
 
-      <AddUserModal
-        open={openAdd}
-        onOpenChange={setOpenAdd}
-        addUser={addUser}
-      />
-      <EditUserModal
-        open={openEdit}
-        onOpenChange={setOpenEdit}
-        email={editingEmail}
-        role={editingRole}
-        onSave={handleEditSave}
-      />
+      {modalType === "add" && <AddUserDialog onSuccess={fetchUsers} />}
+      {modalType === "edit" && <EditUserDialog onSuccess={fetchUsers} />}
+ 
     </div>
   );
 }

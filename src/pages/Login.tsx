@@ -1,4 +1,4 @@
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../context/user-context";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Input } from "../components/ui/input";

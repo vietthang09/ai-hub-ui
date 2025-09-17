@@ -14,12 +14,20 @@ export const getUserInfo = async (): Promise<User> => {
 };
 
 export const createUser = async (payload: CreateUserPayload): Promise<User> => {
-  const { data } = await axiosInstance.post<User>(
-    `${BASE_URL}/admin/users`,
-    payload
-  );
-  return data;
+  try {
+    const { data } = await axiosInstance.post<User>(
+      `${BASE_URL}/admin/users`,
+      payload
+    );
+    return data;
+  } catch (err: any) {
+    if (err.response?.status === 409) {
+      throw new Error("Email already exists");
+    }
+    throw err;
+  }
 };
+
 
 export const updateUser = async (
   oldEmail: string,
