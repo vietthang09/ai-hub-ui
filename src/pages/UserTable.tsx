@@ -6,12 +6,12 @@ import UserRow from "../components/modal/UserRow";
 import { Button } from "../components/ui/button";
 import SearchBar from "../components/SearchBar";
 import { getUsers, deleteUser } from "../services/userService";
-import type { User } from "../services/types";
 import AddUserDialog from "../components/modal/AddUserDialog";
 import EditUserDialog from "../components/modal/EditUserDialog";
+import type { UserItem } from "../services/types";
  
 export default function UserTable() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -75,16 +75,16 @@ export default function UserTable() {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((u) => (
+                {filteredUsers.map((user) => (
                   <UserRow
-                    key={u.email}
-                    email={u.email}
-                    role={u.role || "user"}
+                    key={user.email}
+                    email={user.email}
+                    role={user.role || "user"}
                     onEdit={() => {
-                      setUser(u.email, u.role);
+                      setUser(user);
                       setModalType("edit");
                     }}
-                    onDelete={() => handleDelete(u.email)}
+                    onDelete={() => handleDelete(user.email)}
                   />
                 ))}
               </tbody>

@@ -1,4 +1,4 @@
-export interface User {
+export interface UserItem {
   email: string;
   role: string;
 }
@@ -6,7 +6,7 @@ export interface User {
 export interface CreateUserPayload {
   email: string;
   password: string;
-  role?: User["role"];
+  role?: UserItem["role"];
 }
 
 export interface UpdateUserPayload {
