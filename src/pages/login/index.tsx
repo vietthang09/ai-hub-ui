@@ -1,15 +1,15 @@
-import { useUserContext } from "../context/user-context";
-import { useAuthStore } from "../store/authStore";
+
 import { useNavigate, useLocation } from "react-router-dom";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
-import { loginService } from "../services/authService";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../utils/validation";
 import type z from "zod";
 import { useForm } from "react-hook-form";
+import { loginSchema } from "./schemas/login.schema";
+import { useAuthStore } from "../../store/authStore";
+import { loginService } from "../../services/authService";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 
 type LoginForm = z.infer<typeof loginSchema>;
 
@@ -18,8 +18,7 @@ export default function Login() {
   const location = useLocation();
   const from = (location.state as any)?.from?.pathname || "/";
 
-  const { setAuthUser } = useAuthStore();
-  const { fetchUserInfo } = useUserContext();
+  const { setAuthUser } = useAuthStore(); 
 
   const {
     register,
@@ -34,7 +33,6 @@ export default function Login() {
       const res = await loginService(data.email.trim(), data.password.trim());
       setAuthUser(res);
       toast.success("Login successful!");
-      await fetchUserInfo();
       navigate(from, { replace: true, state: { justLoggedIn: true } });
     } catch (err: any) {
       console.error(err);

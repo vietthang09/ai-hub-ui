@@ -11,14 +11,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", to: "/home" },
   { label: "Profile", to: "/profile" },
-  {
-    label: "User",
-    children: [
-      { label: "User List", to: "/usertable" },
-      // { label: "Invite User", to: "/usertable?view=invite" },
-      // { label: "Roles & Permissions", to: "/roles" },
-    ],
-  },
+  { label: "Users", to: "/users" },
 ];
 
 export default function Navbar() {

@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
-import { registerSevice } from "../services/authService";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "../utils/validation"; // chỉ import schema
 import type { z } from "zod";
+import { registerSchema } from "../users/schemas/register.schema";
+import { registerSevice } from "../../services/authService";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 
 type RegisterForm = z.infer<typeof registerSchema>;
 

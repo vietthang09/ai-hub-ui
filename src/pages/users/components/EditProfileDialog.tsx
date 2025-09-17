@@ -1,16 +1,9 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { Eye, EyeOff } from "lucide-react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog";
+import { Button } from "../../../components/ui/button";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
 
 export default function EditProfileModal() {
   const [open, setOpen] = useState(false);
@@ -111,33 +104,33 @@ export default function EditProfileModal() {
               onChange={handleChange}
             />
           </div>
-<div>
-  <Label htmlFor="avatar">Avatar</Label>
-  <div className="mt-2 flex flex-col items-start">
-    <label
-      htmlFor="avatar"
-      className="w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer overflow-hidden hover:border-indigo-500 transition"
-    >
-      {formData.avatar ? (
-        <img
-          src={URL.createObjectURL(formData.avatar)}
-          alt="Preview"
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <span className="text-sm text-gray-400">Upload</span>
-      )}
-    </label>
-    <Input
-      id="avatar"
-      name="avatar"
-      type="file"
-      accept="image/*"
-      onChange={handleChange}
-      className="hidden"
-    />
-  </div>
-</div>
+          <div>
+            <Label htmlFor="avatar">Avatar</Label>
+            <div className="mt-2 flex flex-col items-start">
+              <label
+                htmlFor="avatar"
+                className="w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer overflow-hidden hover:border-indigo-500 transition"
+              >
+                {formData.avatar ? (
+                  <img
+                    src={URL.createObjectURL(formData.avatar)}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-sm text-gray-400">Upload</span>
+                )}
+              </label>
+              <Input
+                id="avatar"
+                name="avatar"
+                type="file"
+                accept="image/*"
+                onChange={handleChange}
+                className="hidden"
+              />
+            </div>
+          </div>
 
         </div>
 

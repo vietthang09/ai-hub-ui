@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import { useUserContext } from "../context/user-context";
+
 import toast, { Toaster } from "react-hot-toast";
-import UserRow from "../components/modal/UserRow";
-import { Button } from "../components/ui/button";
-import SearchBar from "../components/SearchBar";
-import { getUsers, deleteUser } from "../services/userService";
-import AddUserDialog from "../components/modal/AddUserDialog";
-import EditUserDialog from "../components/modal/EditUserDialog";
-import type { UserItem } from "../services/types";
+import type { UserItem } from "../../services/types";
+import { useUserContext } from "../../context/user-context";
+import { deleteUser, getUsers } from "../../services/userService";
+import Navbar from "../../components/Navbar";
+import SearchBar from "../../components/SearchBar";
+import { Button } from "../../components/ui/button";
+import UserRow from "./components/UserRow";
+import UserDialogs from "./components/UserDialogs";
  
-export default function UserTable() {
+export default function UsersPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,9 +95,7 @@ export default function UserTable() {
         </div>
       </div>
 
-      {modalType === "add" && <AddUserDialog onSuccess={fetchUsers} />}
-      {modalType === "edit" && <EditUserDialog onSuccess={fetchUsers} />}
- 
+      <UserDialogs />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Trash, UserPen } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../../components/ui/button";
 
 interface UserRowProps {
   email: string;

@@ -1,22 +1,12 @@
 import { useState } from "react";
-import { updateUser } from "../../services/userService";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import toast from "react-hot-toast";
-import { useUserContext } from "../../context/user-context";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "../ui/dialog";
+import { useUserContext } from "../../../context/user-context";
+import { updateUser } from "../../../services/userService";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 
-export default function EditUserDialog({
-  onSuccess,
-}: {
-  onSuccess: () => void;
-}) {
+export default function EditUserDialog() {
   const { user, setUser, setModalType, modalType } = useUserContext();
 
   if (!user) return null;
@@ -29,7 +19,6 @@ export default function EditUserDialog({
       setLoading(true);
       await updateUser(user.email, { role: user.role });
       toast.success("User updated!");
-      onSuccess();
       setModalType(null);
       setUser(null);
     } catch {
