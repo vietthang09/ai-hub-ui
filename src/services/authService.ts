@@ -1,8 +1,10 @@
 import axiosInstance from "./axiosInstance";
+import type { User } from "./types";
+import { useAuthStore } from "../store/authStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export interface User {
+export interface AuthUser extends User {
   email: string;
   role: string;
   message: string;
@@ -13,17 +15,20 @@ export interface User {
 export interface RegisterResponse {
   role: string;
   message: string;
-  user?: User;
+  user?: AuthUser;
 }
 
 export const loginService = async (
   email: string,
   password: string
-): Promise<User> => {
-  const { data } = await axiosInstance.post<User>(`${BASE_URL}/login`, {
+): Promise<AuthUser> => {
+  const { data } = await axiosInstance.post<AuthUser>(`${BASE_URL}/login`, {
     email,
     password,
   });
+
+  useAuthStore.getState().setAuthUser(data);
+
   return data;
 };
 
@@ -36,4 +41,9 @@ export const registerSevice = async (
     { email, password }
   );
   return data;
+};
+
+export const logoutService = (): void => {
+  const { logout } = useAuthStore.getState();
+  logout();
 };

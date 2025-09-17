@@ -1,26 +1,43 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/auth-context";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import toast, { Toaster } from "react-hot-toast";
+import { registerSevice } from "../services/authService";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "../utils/validation"; // chỉ import schema
+import type { z } from "zod";
+
+type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function Register() {
-  const { register, emailError, passwordError } = useAuth();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const success = await register(email, password);
-    if (success) navigate("/login");
+  const {
+    register: registerField,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data: RegisterForm) => {
+    try {
+      const res = await registerSevice(data.email.trim(), data.password.trim());
+      toast.success(res.message || "Registered successfully!");
+      navigate("/login");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err?.response?.data?.error || "Registration failed!");
+    }
   };
 
   return (
     <div className="h-screen flex items-center justify-center">
+      <Toaster position="top-right" />
       <form
-        onSubmit={handleRegister}
+        onSubmit={handleSubmit(onSubmit)}
         className="w-96 p-6 bg-white rounded-2xl shadow-lg space-y-4"
       >
         <h1 className="text-2xl font-bold text-center">Register</h1>
@@ -28,35 +45,35 @@ export default function Register() {
         <Input
           type="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          {...registerField("email")}
           className="w-full p-2 border rounded-md"
         />
-        {emailError && <p className=" text-red-500 text-sm">{emailError}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
 
         <Input
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...registerField("password")}
           className="w-full p-2 border rounded-md"
         />
-        {passwordError && (
-          <p className=" text-red-500 text-sm">{passwordError}</p>
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
         )}
 
         <Button
           type="submit"
-          formNoValidate
-          className="w-full  text-white py-2 rounded-md"
+          disabled={isSubmitting}
+          className="w-full text-white py-2 rounded-md"
         >
-          Register
+          {isSubmitting ? "Registering..." : "Register"}
         </Button>
 
         <p className="text-sm text-center mt-2">
           Already have an account?{" "}
           <span
-            className=" text-blue-600 cursor-pointer hover:underline"
+            className="text-blue-600 cursor-pointer hover:underline"
             onClick={() => navigate("/login")}
           >
             Login
