@@ -3,8 +3,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { Mail, Phone, Shield, Calendar } from "lucide-react";
 import type { User } from "../../services/types";
 import { getUserInfo } from "../../services/userService";
-import Navbar from "../../components/Navbar";
 import EditProfileModal from "../users/components/EditProfileDialog";
+import Navbar from "../../components/common/Navbar";
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);

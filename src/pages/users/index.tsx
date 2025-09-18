@@ -4,11 +4,11 @@ import toast, { Toaster } from "react-hot-toast";
 import type { UserItem } from "../../services/types";
 import { useUserContext } from "../../context/user-context";
 import { deleteUser, getUsers } from "../../services/userService";
-import Navbar from "../../components/Navbar";
-import SearchBar from "../../components/SearchBar";
 import { Button } from "../../components/ui/button";
 import UserRow from "./components/UserRow";
 import UserDialogs from "./components/UserDialogs";
+import Navbar from "../../components/common/Navbar";
+import SearchBar from "../../components/common/SearchBar";
  
 export default function UsersPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
