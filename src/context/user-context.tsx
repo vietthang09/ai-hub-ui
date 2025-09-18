@@ -1,36 +1,28 @@
+import type { UserItem } from "../services/types";
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-export type UserModalType = "add" | "edit";
-export type UserType = {
-  email: string | null;
-  role: string;
-};
+type UserModalType = "add" | "edit";
 
 interface UserContextType {
+  user: UserItem | null;
+  setUser: (user: UserItem | null) => void;
   modalType: UserModalType | null;
   setModalType: (modalType: UserModalType | null) => void;
-
-  user: { email: string | null; role: string };
-  setUser: (email: string, role: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<UserItem | null>(null);
   const [modalType, setModalType] = useState<UserModalType | null>(null);
-  const [user, _setUser] = useState<UserType>({email: null,role: "",});
-
-  const setUser = (email: string, role: string) => {
-    _setUser({ email, role });
-  };
 
   return (
     <UserContext.Provider
       value={{
-        modalType,
-        setModalType,
         user,
         setUser,
+        modalType,
+        setModalType,
       }}
     >
       {children}

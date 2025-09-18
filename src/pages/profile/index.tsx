@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import toast, { Toaster } from "react-hot-toast";
 import { Mail, Phone, Shield, Calendar } from "lucide-react";
-import EditProfileModal from "../components/modal/EditProfileDialog";
-import { getUserInfo } from "../services/userService";
-import type { User } from "../services/types";
+import type { User } from "../../services/types";
+import { getUserInfo } from "../../services/userService";
+import EditProfileModal from "../users/components/EditProfileDialog";
+import Navbar from "../../components/common/Navbar";
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);

@@ -1,34 +1,26 @@
 import { useState } from "react";
-import { updateUser } from "../../services/userService";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import toast from "react-hot-toast";
-import { useUserContext } from "../../context/user-context";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "../ui/dialog";
+import { useUserContext } from "../../../context/user-context";
+import { updateUser } from "../../../services/userService";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 
-export default function EditUserDialog({
-  onSuccess,
-}: {
-  onSuccess: () => void;
-}) {
+export default function EditUserDialog() {
   const { user, setUser, setModalType, modalType } = useUserContext();
+
+  if (!user) return null;
+
   const [loading, setLoading] = useState(false);
 
   const handleUpdate = async () => {
-    if (!user.email) return;
+    if (!user) return;
     try {
       setLoading(true);
       await updateUser(user.email, { role: user.role });
       toast.success("User updated!");
-      onSuccess();
       setModalType(null);
-      setUser("", "");
+      setUser(null);
     } catch {
       toast.error("Failed to update user");
     } finally {
@@ -42,7 +34,7 @@ export default function EditUserDialog({
       onOpenChange={(open) => {
         if (!open) {
           setModalType(null);
-          setUser("", "");
+          setUser(null);
         }
       }}
     >
@@ -61,7 +53,7 @@ export default function EditUserDialog({
           />
           <select
             value={user.role}
-            onChange={(e) => user.email && setUser(user.email, e.target.value)}
+            onChange={(e) => user.email && setUser({...user, role: e.target.value })}
             className="w-full border rounded px-3 py-2"
           >
             <option value="user">User</option>
@@ -77,7 +69,7 @@ export default function EditUserDialog({
             variant="outline"
             onClick={() => {
               setModalType(null);
-              setUser("", "");
+              setUser(null);
             }}
           >
             Cancel

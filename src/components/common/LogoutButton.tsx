@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import toast from "react-hot-toast";
-import { logoutService } from "../services/authService";
+import { logoutService } from "../../services/authService";
+import { Button } from "../ui/button";
 
 export default function LogoutButton() {
   const navigate = useNavigate();
