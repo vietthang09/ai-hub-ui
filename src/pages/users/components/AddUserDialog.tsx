@@ -3,17 +3,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
 import toast from "react-hot-toast";
-import { registerSchema } from "../schemas/register.schema";
 import { useUserContext } from "../../../context/user-context";
 import { createUser } from "../../../services/userService";
-import { Dialog, DialogContent, DialogFooter, DialogTitle } from "../../../components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+} from "../../../components/ui/dialog";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
+import { registerSchema } from "../../auth/register/schemas/register.schema";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function AddUserDialog() {
-  const { modalType, setModalType } = useUserContext();
+  const { modalType, setModalType,setReload } = useUserContext();
+
+  const handleSuccess = () => {
+  setReload((prev) => !prev); 
+};
   const {
     register,
     handleSubmit,
@@ -29,6 +39,7 @@ export default function AddUserDialog() {
       await createUser({ ...values, role: "user" });
       toast.success("User created!");
       reset();
+      handleSuccess();
       setModalType(null);
     } catch (err: any) {
       if (err.message === "Email already exists") {
@@ -44,9 +55,12 @@ export default function AddUserDialog() {
       open={modalType === "add"}
       onOpenChange={(open) => setModalType(open ? "add" : null)}
     >
-      <DialogContent className="sm:max-w-[33rem] bg-white rounded-lg shadow-lg p-6">
-        <DialogTitle className="text-base text-gray-500">
-          Add User
+      <DialogContent className="sm:max-w-[28rem] bg-white rounded-lg shadow-lg p-6">
+        <DialogTitle className="text-base text-black">
+          Add New User
+          <DialogDescription className="text-gray-500 text-xs">
+            Create new user here. Click save when you're done.
+          </DialogDescription>
         </DialogTitle>
 
         <form
@@ -55,12 +69,15 @@ export default function AddUserDialog() {
           autoComplete="off"
         >
           <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+
             <Input
               {...register("email")}
               placeholder="Email"
               autoComplete="off"
-              className={`w-full border rounded px-3 py-2 ${errors.email ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full border rounded px-3 py-2 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -70,13 +87,16 @@ export default function AddUserDialog() {
           </div>
 
           <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+
             <Input
               {...register("password")}
               type="password"
               autoComplete="new-password"
               placeholder="Password"
-              className={`w-full border rounded px-3 py-2 ${errors.password ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full border rounded px-3 py-2 ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              }`}
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -86,16 +106,16 @@ export default function AddUserDialog() {
           </div>
 
           <DialogFooter className="flex justify-end gap-2 mt-4">
-            <Button type="submit" variant="secondary" disabled={isSubmitting}>
-              {isSubmitting ? "Processing..." : "Add"}
+            <Button type="submit" variant="default" disabled={isSubmitting}>
+              {isSubmitting ? "Processing..." : "Save changes"}
             </Button>
-            <Button
+            {/* <Button
               type="button"
               variant="outline"
               onClick={() => setModalType(null)}
             >
               Cancel
-            </Button>
+            </Button> */}
           </DialogFooter>
         </form>
       </DialogContent>

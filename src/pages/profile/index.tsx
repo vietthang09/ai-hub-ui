@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Mail, Phone, Shield, Calendar } from "lucide-react";
 import type { User } from "../../services/types";
 import { getUserInfo } from "../../services/userService";
-import EditProfileModal from "../users/components/EditProfileDialog";
 import Navbar from "../../components/common/Navbar";
 
 export default function Profile() {
@@ -30,89 +28,28 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="h-screen flex">
-      <Toaster position="top-right" />
+    
+    <div className="h-screen flex bg-gray-50">
+       <Toaster position="top-right" />
       <Navbar />
-
-      <div className="ml-72 flex-1 bg-gray-50 overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center">
         {loading ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            Loading profile...
-          </div>
+          <p>Loading...</p>
         ) : user ? (
-          <div className="max-w-5xl mx-auto">
-            {/* Banner */}
-            <div className="relative h-48 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-b-xl shadow">
-              {/* Avatar */}
-              <div className="absolute -bottom-16 left-8">
-                <img
-                  src="https://i.pinimg.com/474x/37/81/49/3781495f0af90005c96520aee7cd0c21.jpg"
-                  alt="User Avatar"
-                  className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
-                />
-              </div>
-            </div>
-
-            <div className="mt-20 px-8">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-800">
-                    {"Thu Thao"}
-                  </h1>
-                  <span
-                    className={`inline-block mt-2 px-3 py-1 text-sm font-medium rounded-full ${
-                      user.role === "admin"
-                        ? "bg-red-100 text-red-600"
-                        : "bg-green-100 text-green-600"
-                    }`}
-                  >
-                    {user.role}
-                  </span>
-                </div>
-                <>
-                  <EditProfileModal />
-                </>
-              </div>
-
-              {/* Info grid */}
-              <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="flex items-center gap-3 bg-white p-4 rounded-xl shadow">
-                  <Mail className="text-indigo-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">{user.email}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-4 rounded-xl shadow">
-                  <Phone className="text-indigo-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="font-medium">{"N/A"}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-4 rounded-xl shadow">
-                  <Shield className="text-indigo-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Role</p>
-                    <p className="font-medium">{user.role}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-4 rounded-xl shadow">
-                  <Calendar className="text-indigo-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Joined</p>
-                    <p className="font-medium">{"Unknown"}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className= "p-8 rounded text-center space-y-4">
+            <h1 className="text-2xl font-bold">Profile</h1>
+            <p>
+              <span className="font-semibold">Email:</span> {user.email}
+            </p>
+            <p>
+              <span className="font-semibold">Role:</span> {user.role}
+            </p>
           </div>
         ) : (
-          <div className="flex items-center justify-center h-full text-red-500">
-            No user data
-          </div>
+          <p>User data not available.</p>
         )}
       </div>
+
     </div>
   );
 }

@@ -2,12 +2,31 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useUserContext } from "../../../context/user-context";
 import { updateUser } from "../../../services/userService";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../../../components/ui/dialog";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 export default function EditUserDialog() {
-  const { user, setUser, setModalType, modalType } = useUserContext();
+  const { user, setUser, setModalType, modalType, setReload } =
+    useUserContext();
+
+  const handleSuccess = () => {
+    setReload((prev) => !prev);
+  };
 
   if (!user) return null;
 
@@ -17,10 +36,12 @@ export default function EditUserDialog() {
     if (!user) return;
     try {
       setLoading(true);
-      await updateUser(user.email, { role: user.role });
-      toast.success("User updated!");
-      setModalType(null);
-      setUser(null);
+      await updateUser(user.email, { role: user.role }).then((res) => {
+        toast.success(res.message);
+        handleSuccess();
+        setModalType(null);
+        setUser(null);
+      });
     } catch {
       toast.error("Failed to update user");
     } finally {
@@ -38,42 +59,47 @@ export default function EditUserDialog() {
         }
       }}
     >
-      <DialogContent className="sm:max-w-[33rem] bg-white rounded-lg shadow-lg p-6">
+      <DialogContent className="sm:max-w-[28rem] bg-white rounded-lg shadow-lg p-6">
         <DialogHeader>
-          <DialogTitle className="text-base text-gray-500">
-            Edit User Role
+          <DialogTitle className="text-base text-black">
+            Edit User
+            <DialogDescription className="text-gray-500 text-xs">
+              Update the user here. Click save when you're done.
+            </DialogDescription>
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <label className="block text-sm font-medium">Email</label>
+
           <Input
             value={user.email || ""}
             readOnly
             className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
           />
-          <select
+          <label className="block text-sm font-medium">Role</label>
+
+          <Select
             value={user.role}
-            onChange={(e) => user.email && setUser({...user, role: e.target.value })}
-            className="w-full border rounded px-3 py-2"
+            onValueChange={(value) =>
+              user.email && setUser({ ...user, role: value })
+            }
           >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select role" />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value="user">User</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <DialogFooter className="flex justify-end gap-2 mt-4">
-          <Button onClick={handleUpdate} variant="secondary" disabled={loading}>
-            {loading ? "Saving..." : "Save"}
+        <DialogFooter className="z-10">
+          <Button onClick={handleUpdate} variant="default" disabled={loading}>
+            {loading ? "Saving..." : "Save changes"}
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setModalType(null);
-              setUser(null);
-            }}
-          >
-            Cancel
-          </Button>
+         
         </DialogFooter>
       </DialogContent>
     </Dialog>

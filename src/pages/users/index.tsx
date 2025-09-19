@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import toast, { Toaster } from "react-hot-toast";
 import type { UserItem } from "../../services/types";
 import { useUserContext } from "../../context/user-context";
@@ -7,21 +6,31 @@ import { deleteUser, getUsers } from "../../services/userService";
 import { Button } from "../../components/ui/button";
 import UserRow from "./components/UserRow";
 import UserDialogs from "./components/UserDialogs";
-import Navbar from "../../components/common/Navbar";
 import SearchBar from "../../components/common/SearchBar";
- 
+import Navbar from "../../components/common/Navbar";
+import { MailPlus, UserPlus } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableRow,
+  TableHead as Th,
+} from "../../components/ui/table";
+ import Pagination from "./components/Pagination";
+
 export default function UsersPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { modalType, setModalType, setUser } = useUserContext();
+  const { setModalType, setUser, reload } = useUserContext();
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const data = await getUsers();
       setUsers(data);
+      setUsers(data.reverse());
     } catch (err: any) {
       toast.error(err?.message || "Failed to fetch users");
     } finally {
@@ -31,7 +40,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [reload]);
 
   const handleDelete = async (email: string) => {
     try {
@@ -49,53 +58,94 @@ export default function UsersPage() {
       (u.role?.toLowerCase() || "").includes(searchQuery.toLowerCase())
   );
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Reset page when search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   return (
-    <div className="ml-72 h-screen flex flex-col overflow-hidden bg-gray-50">
-      <Toaster position="top-right" />
-      <Navbar />
+    <div className="flex h-screen w-full bg-gray-50">
+      <Navbar>
+        <Toaster position="top-right" />
 
-      <div className="flex-1 flex flex-col p-4 overflow-hidden">
-        <div className="flex justify-between items-center mb-4">
-          <SearchBar onSearch={setSearchQuery} />
-          <Button variant="secondary" onClick={() => setModalType("add")}>
-            Add User
-          </Button>
+        <div className="flex flex-col h-full p-4">
+          <div className="flex justify-between items-center -mt-4 mb-6">
+            <SearchBar onSearch={setSearchQuery} />
+
+            <div className="flex gap-2">
+              <Button className="space-x-1" variant={"outline"}>
+                <span>Invite User</span> <MailPlus size={18} />
+              </Button>
+              <Button
+                className="bg-gray-700 space-x-1"
+                onClick={() => setModalType("add")}
+              >
+                <span>Add User</span> <UserPlus size={18} />
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-visible">
+            {loading ? (
+              <p className="text-gray-500">Loading users...</p>
+            ) : filteredUsers.length > 0 ? (
+              <>
+                <Table>
+                  <TableHeader className="bg-gray-100">
+                    <TableRow>
+                      {/* <Th className="px-4 py-2 text-center">
+                        <input
+                          type="checkbox"
+                          checked={allSelected}
+                          onChange={(e) => handleSelectAll(e.target.checked)}
+                        />
+                      </Th> */}
+                      <Th className="px-4 py-2 text-center">#</Th>
+                      <Th className=" px-4 py-2 text-center">Name</Th>
+                      <Th className=" px-4 py-2 text-center">Email</Th>
+                      <Th className=" px-4 py-2 text-center">Role</Th>
+                      <Th className=" px-4 py-2 text-center">Status</Th>
+                      <Th className=" px-4 py-2 text-center"></Th>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentUsers.map((user, index) => (
+                      <UserRow
+                        key={user.email}
+                        index={index}
+                        email={user.email}
+                        role={user.role || "user"}
+                        onEdit={() => {
+                          setUser(user);
+                          setModalType("edit");
+                        }}
+                        onDelete={() => handleDelete(user.email)}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
+
+<Pagination
+  totalItems={filteredUsers.length}
+  currentPage={currentPage}
+  setCurrentPage={setCurrentPage}
+  itemsPerPage={itemsPerPage}
+/>              </>
+            ) : (
+              <p className="text-red-500">No users found</p>
+            )}
+          </div>
         </div>
 
-        <div className="flex-1 overflow-auto">
-          {loading ? (
-            <p className="text-gray-500">Loading users...</p>
-          ) : filteredUsers.length > 0 ? (
-            <table className="w-full border-collapse border border-gray-300">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border px-4 py-2 text-center">Email</th>
-                  <th className="border px-4 py-2 text-center w-40">Role</th>
-                  <th className="border px-4 py-2 text-center w-32">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((user) => (
-                  <UserRow
-                    key={user.email}
-                    email={user.email}
-                    role={user.role || "user"}
-                    onEdit={() => {
-                      setUser(user);
-                      setModalType("edit");
-                    }}
-                    onDelete={() => handleDelete(user.email)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-red-500">No users found</p>
-          )}
-        </div>
-      </div>
-
-      <UserDialogs />
+        <UserDialogs />
+      </Navbar>
     </div>
   );
 }

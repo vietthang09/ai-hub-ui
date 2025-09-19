@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserProvider } from "./context/user-context";
-import Profile from "./pages/Profile";
 import RouteGuard from "./routes/RouteGuard";
 import UsersPage from "./pages/users";
 import HomePage from "./pages/home";
-import Login from "./pages/login";
-import Register from "./pages/register";
-
+import Login from "./pages/auth/login";
+import Register from "./pages/auth/register";
+import Profile from "./pages/profile";
+ 
 function App() {
   return (
-    <UserProvider>
+     <UserProvider>
+ 
       <BrowserRouter>
         <Routes>
           {/* Guest routes */}
@@ -42,6 +43,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+ 
     </UserProvider>
   );
 }

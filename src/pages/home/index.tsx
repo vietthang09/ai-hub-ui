@@ -2,15 +2,13 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "../../components/common/Navbar";
 
 export default function HomePage() {
-
   return (
-    <div className="h-screen flex flex-col">
-      <Toaster position="top-right" />
+    <div className="flex h-screen w-full bg-gray-50">
       <Navbar />
 
-      <div className="ml-72 flex-1 flex items-center justify-center bg-gray-50">
-        <h1 className="text-3xl font-bold">Home Page</h1>
-      </div>
+      <Toaster position="top-right" />
+
+      <div className="flex flex-col h-full p-4"></div>
     </div>
   );
 }

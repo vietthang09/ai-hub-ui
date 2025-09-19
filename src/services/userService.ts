@@ -28,12 +28,14 @@ export const createUser = async (payload: CreateUserPayload): Promise<User> => {
   }
 };
 
-
+interface UpdateUserResponse {
+  message: string
+}
 export const updateUser = async (
   oldEmail: string,
   payload: { role?: string }
-): Promise<UpdateUserPayload> => {
-  const { data } = await axiosInstance.put<UpdateUserPayload>(
+): Promise<UpdateUserResponse> => {
+  const { data } = await axiosInstance.put<UpdateUserResponse>(
     `${BASE_URL}/admin/user/${encodeURIComponent(oldEmail)}`,
     payload
   );

@@ -8,6 +8,8 @@ interface UserContextType {
   setUser: (user: UserItem | null) => void;
   modalType: UserModalType | null;
   setModalType: (modalType: UserModalType | null) => void;
+  reload: boolean;
+  setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -15,6 +17,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserItem | null>(null);
   const [modalType, setModalType] = useState<UserModalType | null>(null);
+  const [reload, setReload] = useState(false);
 
   return (
     <UserContext.Provider
@@ -23,6 +26,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setUser,
         modalType,
         setModalType,
+        reload,
+        setReload,
       }}
     >
       {children}
