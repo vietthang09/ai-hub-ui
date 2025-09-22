@@ -59,25 +59,25 @@ export default function EditUserDialog() {
         }
       }}
     >
-      <DialogContent className="sm:max-w-[28rem] bg-white rounded-lg shadow-lg p-6">
+      <DialogContent className="sm:max-w-[28rem] bg-primary rounded-lg shadow-lg p-6">
         <DialogHeader>
-          <DialogTitle className="text-base text-black">
+          <DialogTitle className="text-base text-white">
             Edit User
-            <DialogDescription className="text-gray-500 text-xs">
+            <DialogDescription className="text-gray-400 text-xs">
               Update the user here. Click save when you're done.
             </DialogDescription>
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-2">
-          <label className="block text-sm font-medium">Email</label>
+          <label className="block text-sm text-white font-medium">Email</label>
 
           <Input
             value={user.email || ""}
             readOnly
-            className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+            className="w-full border rounded px-3 py-2 bg-gray-500 cursor-not-allowed"
           />
-          <label className="block text-sm font-medium">Role</label>
+          <label className="block text-sm text-white font-medium">Role</label>
 
           <Select
             value={user.role}
@@ -85,10 +85,10 @@ export default function EditUserDialog() {
               user.email && setUser({ ...user, role: value })
             }
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full text-white bg-primary">
               <SelectValue placeholder="Select role" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent >
               <SelectItem value="user">User</SelectItem>
               <SelectItem value="admin">Admin</SelectItem>
             </SelectContent>
@@ -96,7 +96,7 @@ export default function EditUserDialog() {
         </div>
 
         <DialogFooter className="z-10">
-          <Button onClick={handleUpdate} variant="default" disabled={loading}>
+          <Button onClick={handleUpdate} className="bg-gray-400 text-primary" variant="ghost" disabled={loading}>
             {loading ? "Saving..." : "Save changes"}
           </Button>
          

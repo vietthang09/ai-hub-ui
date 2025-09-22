@@ -1,5 +1,16 @@
 import { NavLink } from "react-router-dom";
-import { Clock, Home, User, Users, Settings, Search, BarChart, MessageCircle, Star } from "lucide-react";
+import {
+  Clock,
+  Home,
+  User,
+  Users,
+  Settings,
+  Search,
+  BarChart,
+  MessageCircle,
+  Star,
+  Menu,
+} from "lucide-react";
 import { SidebarContent, SidebarFooter, SidebarHeader } from "../ui/sidebar";
 import { useState } from "react";
 import { cn } from "../../lib/utils";
@@ -12,7 +23,7 @@ type NavItem = {
   soon?: boolean;
 };
 
- const Icons: Record<string, React.ElementType> = {
+const Icons: Record<string, React.ElementType> = {
   Home: Home,
   Profile: User,
   Users: Users,
@@ -43,15 +54,35 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
 
   const Leaf = ({ item }: { item: NavItem }) => {
     const Icon = Icons[item.label];
+
+    if (item.soon) {
+      return (
+        <div
+          className={cn(
+            "flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm",
+            "text-gray-400 cursor-not-allowed select-none"
+          )}
+        >
+          <div className="flex items-center gap-2">
+            {Icon && <Icon size={16} />}
+            <span>{item.label}</span>
+          </div>
+          <span className="flex items-center gap-1 text-xs font-medium text-orange-500">
+            <Clock size={12} /> Soon
+          </span>
+        </div>
+      );
+    }
+
     return (
       <NavLink
         to={item.to!}
         className={({ isActive }) =>
           cn(
-            "flex items-center gap-2 rounded-md px-3 py-2 text-sm",
+            "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
             isActive
-              ? "bg-black text-white"
-              : "text-black hover:bg-gray-100"
+              ? "bg-secondary/50 text-secondary"
+              : "text-white hover:bg-secondary/30"
           )
         }
       >
@@ -61,35 +92,11 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
     );
   };
 
-  const SoonLeaf = ({ item }: { item: NavItem }) => (
-    <div
-      className={cn(
-        "flex items-center justify-between rounded-md px-3 py-2 text-sm",
-        "text-gray-400 cursor-not-allowed select-none bg-gray-50"
-      )}
-    >
-      <div className="flex items-center gap-2">
-        {(() => {
-          const Icon = Icons[item.label];
-          return Icon ? <Icon size={16} /> : null;
-        })()}
-        <span>{item.label}</span>
-      </div>
-      <span className="flex items-center gap-1 text-xs font-medium text-orange-500">
-        <Clock size={12} /> Soon
-      </span>
-    </div>
-  );
-
   const Tree = ({ items }: { items: NavItem[] }) => (
     <div className="space-y-1">
-      {items.map((item) =>
-        item.soon ? (
-          <SoonLeaf key={item.label} item={item} />
-        ) : (
-          <Leaf key={item.label} item={item} />
-        )
-      )}
+      {items.map((item) => (
+        <Leaf key={item.label} item={item} />
+      ))}
     </div>
   );
 
@@ -100,13 +107,13 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
         className={cn(
           "transition-all duration-300",
           collapsed ? "w-0 opacity-0" : "w-72 opacity-100",
-          "bg-white"
+          "bg-primary"
         )}
       >
         {!collapsed && (
           <>
             <SidebarHeader className="px-4 py-3">
-              <span className="text-base font-semibold text-gray-900">
+              <span className="text-base font-semibold text-white">
                 Navigation
               </span>
             </SidebarHeader>
@@ -124,8 +131,13 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
       <div className="flex-1 transition-all duration-300">
         <header className="flex items-center justify-between p-3 relative">
           <div className="flex items-center gap-2">
-            <button onClick={() => setCollapsed(!collapsed)}>☰</button>
-            <h1 className="font-bold">User List</h1>
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="border border-gray-700 rounded p-1 text-white"
+            >
+              <Menu size={14} />
+            </button>
+            <h1 className="font-bold text-white">User List</h1>
           </div>
           <ProfileDropdown />
         </header>

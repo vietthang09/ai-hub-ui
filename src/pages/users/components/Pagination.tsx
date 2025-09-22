@@ -34,18 +34,18 @@ export default function Pagination({
   };
 
   return (
-    <div className="fixed bottom-8 right-10 bg-gray-50 p-3 flex items-center gap-2 rounded">
+    <div className="fixed bottom-5 right-10 bg-primary p-3 flex items-center gap-2 rounded">
       <button
         onClick={() => setCurrentPage(1)}
         disabled={currentPage === 1}
-        className="p-1 border rounded disabled:opacity-50"
+        className="p-1 border rounded text-white disabled:opacity-50"
       >
         <ChevronsLeft size={16} />
       </button>
       <button
         onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
         disabled={currentPage === 1}
-        className="p-1 border rounded disabled:opacity-50"
+        className="p-1 border rounded text-white disabled:opacity-50"
       >
         <ChevronLeft size={16} />
       </button>
@@ -61,8 +61,8 @@ export default function Pagination({
             onClick={() => setCurrentPage(page)}
             className={`px-3 py-1 border rounded-lg ${
               page === currentPage
-                ? "bg-gray-800 text-white"
-                : "bg-white text-gray-700 hover:bg-gray-100"
+                ? "bg-white text-primary"
+                : " text-white hover:bg-gray-800"
             }`}
           >
             {page}
@@ -73,14 +73,14 @@ export default function Pagination({
       <button
         onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
         disabled={currentPage === totalPages}
-        className="p-1 border rounded disabled:opacity-50"
+        className="p-1 border rounded text-white disabled:opacity-50"
       >
         <ChevronRight size={16} />
       </button>
       <button
         onClick={() => setCurrentPage(totalPages)}
         disabled={currentPage === totalPages}
-        className="p-1 border rounded disabled:opacity-50"
+        className="p-1 border text-white rounded disabled:opacity-50"
       >
         <ChevronsRight size={16} />
       </button>

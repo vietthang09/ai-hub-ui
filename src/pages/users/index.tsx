@@ -16,7 +16,7 @@ import {
   TableRow,
   TableHead as Th,
 } from "../../components/ui/table";
- import Pagination from "./components/Pagination";
+import Pagination from "./components/Pagination";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
@@ -71,7 +71,7 @@ export default function UsersPage() {
   }, [searchQuery]);
 
   return (
-    <div className="flex h-screen w-full bg-gray-50">
+    <div className="flex h-screen w-full bg-primary">
       <Navbar>
         <Toaster position="top-right" />
 
@@ -80,11 +80,15 @@ export default function UsersPage() {
             <SearchBar onSearch={setSearchQuery} />
 
             <div className="flex gap-2">
-              <Button className="space-x-1" variant={"outline"}>
+              <Button
+                className="space-x-1 border text-white bg-primary"
+                variant={"outline"}
+              >
                 <span>Invite User</span> <MailPlus size={18} />
               </Button>
               <Button
-                className="bg-gray-700 space-x-1"
+                variant={"outline"}
+                className="bg-blue-100 text-primary space-x-1"
                 onClick={() => setModalType("add")}
               >
                 <span>Add User</span> <UserPlus size={18} />
@@ -92,14 +96,14 @@ export default function UsersPage() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-visible">
+          <div className="flex-1 p-2 border border-gray-700 rounded-lg">
             {loading ? (
-              <p className="text-gray-500">Loading users...</p>
+              <p className="text-white">Loading users...</p>
             ) : filteredUsers.length > 0 ? (
               <>
                 <Table>
-                  <TableHeader className="bg-gray-100">
-                    <TableRow>
+                  <TableHeader>
+                    <TableRow className="text-white border-b border-gray-700">
                       {/* <Th className="px-4 py-2 text-center">
                         <input
                           type="checkbox"
@@ -131,13 +135,13 @@ export default function UsersPage() {
                     ))}
                   </TableBody>
                 </Table>
-
-<Pagination
-  totalItems={filteredUsers.length}
-  currentPage={currentPage}
-  setCurrentPage={setCurrentPage}
-  itemsPerPage={itemsPerPage}
-/>              </>
+                <Pagination
+                  totalItems={filteredUsers.length}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  itemsPerPage={itemsPerPage}
+                />{" "}
+              </>
             ) : (
               <p className="text-red-500">No users found</p>
             )}

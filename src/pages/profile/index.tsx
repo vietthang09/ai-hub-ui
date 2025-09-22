@@ -29,10 +29,10 @@ export default function Profile() {
 
   return (
     
-    <div className="h-screen flex bg-gray-50">
+    <div className="h-screen flex bg-primary">
+      <Navbar> 
        <Toaster position="top-right" />
-      <Navbar />
-      <div className="flex-1 flex items-center justify-center">
+       <div className="flex-1 flex items-center justify-center">
         {loading ? (
           <p>Loading...</p>
         ) : user ? (
@@ -49,7 +49,7 @@ export default function Profile() {
           <p>User data not available.</p>
         )}
       </div>
-
+</Navbar>
     </div>
   );
 }
