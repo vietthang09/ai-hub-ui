@@ -32,12 +32,12 @@ export default function Profile() {
     <div className="h-screen flex bg-primary">
       <Navbar> 
        <Toaster position="top-right" />
-       <div className="flex-1 flex items-center justify-center">
+       <div className="flex-1 flex items-center text-white justify-center">
         {loading ? (
           <p>Loading...</p>
         ) : user ? (
           <div className= "p-8 rounded text-center space-y-4">
-            <h1 className="text-2xl font-bold">Profile</h1>
+            <h1 className="text-2xl font-bold">Profile Page</h1>
             <p>
               <span className="font-semibold">Email:</span> {user.email}
             </p>

@@ -46,7 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "SEO Optimization", soon: true },
   { label: "Meeting Assistant", soon: true },
   { label: "Chat Bot", soon: true },
-  { label: "Google Review", soon: true },
+  { label: "Google Review", to: "/google-review" },
 ];
 
 export default function Navbar({ children }: { children?: React.ReactNode }) {
@@ -137,7 +137,7 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
             >
               <Menu size={14} />
             </button>
-            <h1 className="font-bold text-white">User List</h1>
+            <h1 className="font-bold text-white">Demo UI</h1>
           </div>
           <ProfileDropdown />
         </header>

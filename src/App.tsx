@@ -6,44 +6,47 @@ import HomePage from "./pages/home";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Profile from "./pages/profile";
- 
+import GoogleReview from "./pages/google-review.tsx";
+import { ReviewProvider } from "./context/review-context.tsx";
+
 function App() {
   return (
-     <UserProvider>
- 
-      <BrowserRouter>
-        <Routes>
-          {/* Guest routes */}
-          <Route
-            path="/login"
-            element={
-              <RouteGuard type="guest">
-                <Login />
-              </RouteGuard>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <RouteGuard type="guest">
-                <Register />
-              </RouteGuard>
-            }
-          />
+    <UserProvider>
+      <ReviewProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Guest routes */}
+            <Route
+              path="/login"
+              element={
+                <RouteGuard type="guest">
+                  <Login />
+                </RouteGuard>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <RouteGuard type="guest">
+                  <Register />
+                </RouteGuard>
+              }
+            />
 
-          {/* Protected routes */}
-          <Route element={<RouteGuard type="protected" />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/users" element={<UsersPage />} />
-          </Route>
+            {/* Protected routes */}
+            <Route element={<RouteGuard type="protected" />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/google-review" element={<GoogleReview />} />
+            </Route>
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
- 
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </ReviewProvider>
     </UserProvider>
   );
 }
