@@ -1,4 +1,4 @@
-import type { UserItem } from "../services/types";
+import type { UserItem } from "../services/auth/types";
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 type UserModalType = "add" | "edit";

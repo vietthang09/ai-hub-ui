@@ -6,7 +6,7 @@ import type z from "zod";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "./schemas/login.schema";
 import { useAuthStore } from "../../../store/authStore";
-import { loginService } from "../../../services/authService";
+import { loginService } from "../../../services/auth/authService";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { AuthLayout } from "../auth-layout";

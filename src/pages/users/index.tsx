@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import type { UserItem } from "../../services/types";
+import type { UserItem } from "../../services/auth/types";
 import { useUserContext } from "../../context/user-context";
-import { deleteUser, getUsers } from "../../services/userService";
+import { deleteUser, getUsers } from "../../services/auth/userService";
 import { Button } from "../../components/ui/button";
 import UserRow from "./components/UserRow";
 import UserDialogs from "./components/UserDialogs";
@@ -14,7 +14,7 @@ import {
   TableBody,
   TableHeader,
   TableRow,
-  TableHead as Th,
+  TableHead,
 } from "../../components/ui/table";
 import Pagination from "./components/Pagination";
 
@@ -111,12 +111,20 @@ export default function UsersPage() {
                           onChange={(e) => handleSelectAll(e.target.checked)}
                         />
                       </Th> */}
-                      <Th className="px-4 py-2 text-center">#</Th>
-                      <Th className=" px-4 py-2 text-center">Name</Th>
-                      <Th className=" px-4 py-2 text-center">Email</Th>
-                      <Th className=" px-4 py-2 text-center">Role</Th>
-                      <Th className=" px-4 py-2 text-center">Status</Th>
-                      <Th className=" px-4 py-2 text-center"></Th>
+                      <TableHead className="px-4 py-2 text-center">#</TableHead>
+                      <TableHead className=" px-4 py-2 text-center">
+                        Name
+                      </TableHead>
+                      <TableHead className=" px-4 py-2 text-center">
+                        Email
+                      </TableHead>
+                      <TableHead className=" px-4 py-2 text-center">
+                        Role
+                      </TableHead>
+                      <TableHead className=" px-4 py-2 text-center">
+                        Status
+                      </TableHead>
+                      <TableHead className=" px-4 py-2 text-center"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

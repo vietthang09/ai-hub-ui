@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import type { User } from "../../services/types";
-import { getUserInfo } from "../../services/userService";
+import type { User } from "../../services/auth/types";
 import Navbar from "../../components/common/Navbar";
 
 export default function Profile() {
@@ -11,8 +10,6 @@ export default function Profile() {
   const fetchUserInfo = async () => {
     try {
       setLoading(true);
-      const data = await getUserInfo();
-      setUser(data);
     } catch (err: any) {
       console.error(err);
       toast.error(
@@ -28,28 +25,27 @@ export default function Profile() {
   }, []);
 
   return (
-    
     <div className="h-screen flex bg-primary">
-      <Navbar> 
-       <Toaster position="top-right" />
-       <div className="flex-1 flex items-center text-white justify-center">
-        {loading ? (
-          <p>Loading...</p>
-        ) : user ? (
-          <div className= "p-8 rounded text-center space-y-4">
-            <h1 className="text-2xl font-bold">Profile Page</h1>
-            <p>
-              <span className="font-semibold">Email:</span> {user.email}
-            </p>
-            <p>
-              <span className="font-semibold">Role:</span> {user.role}
-            </p>
-          </div>
-        ) : (
-          <p>User data not available.</p>
-        )}
-      </div>
-</Navbar>
+      <Navbar>
+        <Toaster position="top-right" />
+        <div className="flex-1 flex items-center text-white justify-center">
+          {loading ? (
+            <p>Loading...</p>
+          ) : user ? (
+            <div className="p-8 rounded text-center space-y-4">
+              <h1 className="text-2xl font-bold">Profile Page</h1>
+              <p>
+                <span className="font-semibold">Email:</span> {user.email}
+              </p>
+              <p>
+                <span className="font-semibold">Role:</span> {user.role}
+              </p>
+            </div>
+          ) : (
+            <p>User data not available.</p>
+          )}
+        </div>
+      </Navbar>
     </div>
   );
 }

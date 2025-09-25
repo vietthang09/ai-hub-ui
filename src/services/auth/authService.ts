@@ -1,6 +1,6 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../axiosInstance";
 import type { User } from "./types";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -22,10 +22,13 @@ export const loginService = async (
   email: string,
   password: string
 ): Promise<AuthUser> => {
-  const { data } = await axiosInstance.post<AuthUser>(`${BASE_URL}/login`, {
-    email,
-    password,
-  });
+  const { data } = await axiosInstance.post<AuthUser>(
+    `${BASE_URL}/api/auth/login`,
+    {
+      email,
+      password,
+    }
+  );
 
   useAuthStore.getState().setAuthUser(data);
 
@@ -37,13 +40,20 @@ export const registerSevice = async (
   password: string
 ): Promise<RegisterResponse> => {
   const { data } = await axiosInstance.post<RegisterResponse>(
-    `${BASE_URL}/register`,
+    `${BASE_URL}/api/auth/register`,
     { email, password }
   );
   return data;
 };
 
-export const logoutService = (): void => {
-  const { logout } = useAuthStore.getState();
-  logout();
+export const logoutService = async (refresh_token: string) => {
+  if (!refresh_token) throw new Error("Missing refresh token");
+
+  const { data } = await axiosInstance.post<RegisterResponse>(
+    `/api/auth/logout`,
+    { refresh_token }
+  );
+
+  return data;
 };
+

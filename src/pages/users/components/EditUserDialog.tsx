@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useUserContext } from "../../../context/user-context";
-import { updateUser } from "../../../services/userService";
+import { updateUser } from "../../../services/auth/userService";
 import {
   Dialog,
   DialogContent,
@@ -88,7 +88,7 @@ export default function EditUserDialog() {
             <SelectTrigger className="w-full text-white bg-primary">
               <SelectValue placeholder="Select role" />
             </SelectTrigger>
-            <SelectContent >
+            <SelectContent>
               <SelectItem value="user">User</SelectItem>
               <SelectItem value="admin">Admin</SelectItem>
             </SelectContent>
@@ -96,10 +96,14 @@ export default function EditUserDialog() {
         </div>
 
         <DialogFooter className="z-10">
-          <Button onClick={handleUpdate} className="bg-gray-400 text-primary" variant="ghost" disabled={loading}>
+          <Button
+            onClick={handleUpdate}
+            className="bg-gray-400 text-primary"
+            variant="ghost"
+            disabled={loading}
+          >
             {loading ? "Saving..." : "Save changes"}
           </Button>
-         
         </DialogFooter>
       </DialogContent>
     </Dialog>

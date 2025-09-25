@@ -1,6 +1,6 @@
 import { TableRow, TableCell } from "../../../components/ui/table";
 import { Button } from "../../../components/ui/button";
-import { Ellipsis, MessageSquare, Info } from "lucide-react";
+import { Ellipsis, MessageSquare, Info, Star } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
 } from "../../../components/ui/dropdown-menu";
- 
+
 interface GoogleReviewProps {
   index: number;
   name: string;
@@ -22,7 +22,7 @@ interface GoogleReviewProps {
 
 export default function ReviewRow({
   index,
-  name,
+   name,
   date,
   reviews,
   rating,
@@ -30,17 +30,17 @@ export default function ReviewRow({
   onDetail,
   onRely,
 }: GoogleReviewProps) {
- 
   return (
     <TableRow className="text-white border-b border-gray-700 hover:bg-cyan-950">
       <TableCell className="px-4 py-2 text-center">{index + 1}</TableCell>
       <TableCell className="px-4 py-2 text-left">
         <div className="flex items-center gap-3">
-          <img
-            src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcaKj0sbOI0nrVXLnFYC2anaYF2nF4meK00njokXMzoA98ouMfN4BQbu36-EkTtgrnH8KnYOl9R6fep9RMmPnUQglS7EkCvJ2cmwQBKHnc5OSVn6R5DAtfeBmLorbzQjIqT-O-oQhjvzDbBbISlzSb0lhaC?key=tE_qip6BHPL4g00JXL_X6Q"
-            alt={name}
-            className="w-8 h-8 rounded-full"
-          />
+          {/* <img
+          src={profile_photo || "/default-avatar.png"}
+          alt="Profile"
+          className="w-8 h-8 rounded-full"
+        /> */}
+
           <span>{name}</span>
         </div>
       </TableCell>
@@ -55,14 +55,13 @@ export default function ReviewRow({
 
       {/* Rating */}
       <TableCell className="px-4 py-2 text-center">
-        <div className="flex gap-1 justify-center">
+        <div className="flex justify-center gap-1">
           {Array.from({ length: 5 }).map((_, i) => (
-            <span
+            <Star
               key={i}
+              size={16}
               className={i < rating ? "text-yellow-400" : "text-gray-600"}
-            >
-              ★
-            </span>
+            />
           ))}
         </div>
       </TableCell>

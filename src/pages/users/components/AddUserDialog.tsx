@@ -4,7 +4,7 @@ import type { z } from "zod";
 
 import toast from "react-hot-toast";
 import { useUserContext } from "../../../context/user-context";
-import { createUser } from "../../../services/userService";
+import { createUser } from "../../../services/auth/userService";
 import {
   Dialog,
   DialogContent,
@@ -52,7 +52,6 @@ export default function AddUserDialog() {
 
   return (
     <Dialog
-
       open={modalType === "add"}
       onOpenChange={(open) => setModalType(open ? "add" : null)}
     >
@@ -119,7 +118,12 @@ export default function AddUserDialog() {
           </div>
 
           <DialogFooter className="flex justify-end gap-2 mt-4">
-            <Button type="submit" className="bg-gray-400 text-primary" variant="ghost" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="bg-gray-400 text-primary"
+              variant="ghost"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Processing..." : "Save changes"}
             </Button>
             {/* <Button

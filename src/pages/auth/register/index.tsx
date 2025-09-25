@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { registerSchema } from "./schemas/register.schema";
-import { registerSevice } from "../../../services/authService";
+import { registerSevice } from "../../../services/auth/authService";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { AuthLayout } from "../auth-layout";
@@ -25,7 +25,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 export default function Register() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
- 
+
   const {
     register: registerField,
     handleSubmit,
@@ -36,10 +36,7 @@ export default function Register() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      const res = await registerSevice(
-        data.email.trim(),
-        data.password.trim()
-      );
+      const res = await registerSevice(data.email.trim(), data.password.trim());
       toast.success(res.message || "Registered successfully!");
       navigate("/login");
     } catch (err: any) {

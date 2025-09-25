@@ -5,16 +5,18 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
 });
 
 // request interceptor
 axiosInstance.interceptors.request.use((config) => {
   const authUser = useAuthStore.getState().authUser;
+  config.headers = config.headers ?? {};
   if (authUser?.access_token) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${authUser.access_token}`,
-    };
+    config.headers.Authorization = `Bearer ${authUser.access_token}`;
   }
   return config;
 });
@@ -37,7 +39,7 @@ axiosInstance.interceptors.response.use(
       }
 
       try {
-        const response = await axios.post(`${BASE_URL}/refresh`, {
+        const response = await axios.post(`${BASE_URL}/api/auth/refresh`, {
           refresh_token: authUser.refresh_token,
         });
         const data = response.data as { access_token: string };

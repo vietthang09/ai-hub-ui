@@ -8,12 +8,18 @@ import Register from "./pages/auth/register";
 import Profile from "./pages/profile";
 import GoogleReview from "./pages/google-review.tsx";
 import { ReviewProvider } from "./context/review-context.tsx";
-
+import BookingPulse from "./pages/booking-pulse/index.tsx";
+import MeetingAssistant from "./pages/meeting-assistant/index.tsx";
+import { MeetingProvider } from "./context/meeting-context.tsx";
+import { ChatBox } from "./pages/chat-bot/index.tsx";
+  
 function App() {
   return (
     <UserProvider>
       <ReviewProvider>
+        <MeetingProvider>
         <BrowserRouter>
+
           <Routes>
             {/* Guest routes */}
             <Route
@@ -39,6 +45,9 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/users" element={<UsersPage />} />
+              <Route path="/booking-pulse" element={<BookingPulse />} />
+              <Route path="/meeting-assistant" element={<MeetingAssistant />} />
+              <Route path="/chat-bot" element={<ChatBox />} />
               <Route path="/google-review" element={<GoogleReview />} />
             </Route>
 
@@ -46,6 +55,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
+        </MeetingProvider>
       </ReviewProvider>
     </UserProvider>
   );

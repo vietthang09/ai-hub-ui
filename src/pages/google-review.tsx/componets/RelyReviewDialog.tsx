@@ -15,8 +15,7 @@ export default function RelyReviewDialog() {
           <DialogTitle>Reply Review</DialogTitle>
         </DialogHeader>
         <div>
-          <h1>Thaoooooo</h1>
-          <textarea
+           <textarea
             className="w-full h-32 p-2 border rounded bg-gray-100 text-black"
             placeholder="Rely..."
           />

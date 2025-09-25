@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Clock,
   Home,
@@ -14,7 +14,7 @@ import {
 import { SidebarContent, SidebarFooter, SidebarHeader } from "../ui/sidebar";
 import { useState } from "react";
 import { cn } from "../../lib/utils";
-import { ProfileDropdown } from "../../pages/users/components/ProfileDropdown";
+import { ProfileDropdown } from "./ProfileDropdown";
 
 type NavItem = {
   label: string;
@@ -40,17 +40,20 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Home", to: "/home" },
   { label: "Profile", to: "/profile" },
   { label: "Users", to: "/users" },
-  { label: "Booking Pulse", soon: true },
+  { label: "Booking Pulse", to: "/booking-pulse" },
   { label: "Persona Finder", soon: true },
   { label: "Dynamic Pricing", soon: true },
   { label: "SEO Optimization", soon: true },
-  { label: "Meeting Assistant", soon: true },
-  { label: "Chat Bot", soon: true },
+  { label: "Meeting Assistant", to: "/meeting-assistant" },
+  { label: "Chat Bot", to: "/chat-bot" },
   { label: "Google Review", to: "/google-review" },
 ];
 
 export default function Navbar({ children }: { children?: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const currentLabel =
+    NAV_ITEMS.find((item) => item.to === location.pathname)?.label ?? "Demo UI";
 
   const Leaf = ({ item }: { item: NavItem }) => {
     const Icon = Icons[item.label];
@@ -113,9 +116,7 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
         {!collapsed && (
           <>
             <SidebarHeader className="px-4 py-3">
-              <span className="text-base font-semibold text-white">
-                Navigation
-              </span>
+              <span className="text-base font-semibold text-white">AI Hub</span>
             </SidebarHeader>
 
             <SidebarContent className="px-3 py-3 overflow-y-auto">
@@ -137,7 +138,7 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
             >
               <Menu size={14} />
             </button>
-            <h1 className="font-bold text-white">Demo UI</h1>
+            <h1 className="font-bold text-white">{currentLabel}</h1>
           </div>
           <ProfileDropdown />
         </header>

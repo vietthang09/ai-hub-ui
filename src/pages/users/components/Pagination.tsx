@@ -21,7 +21,7 @@ export default function Pagination({
 }: PaginationProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-   const getPages = () => {
+  const getPages = () => {
     const pages: (number | "...")[] = [];
     for (let i = 1; i <= totalPages; i++) {
       if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
@@ -52,17 +52,17 @@ export default function Pagination({
 
       {getPages().map((page, idx) =>
         page === "..." ? (
-          <span key={idx} className="px-2">
+          <span key={`ellipsis-${idx}`} className="px-1 pt-2 text-white">
             ...
           </span>
         ) : (
           <button
-            key={page}
+            key={`page-${page}-${idx}`}
             onClick={() => setCurrentPage(page)}
             className={`px-3 py-1 border rounded-lg ${
               page === currentPage
                 ? "bg-white text-primary"
-                : " text-white hover:bg-gray-800"
+                : "text-white hover:bg-gray-800"
             }`}
           >
             {page}

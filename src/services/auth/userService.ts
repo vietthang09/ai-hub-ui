@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../axiosInstance";
 import type { CreateUserPayload, UpdateUserPayload, User } from "./types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -8,10 +8,6 @@ export const getUsers = async (): Promise<User[]> => {
   return data;
 };
 
-export const getUserInfo = async (): Promise<User> => {
-  const { data } = await axiosInstance.get<User>(`${BASE_URL}/user_info`);
-  return data;
-};
 
 export const createUser = async (payload: CreateUserPayload): Promise<User> => {
   try {
@@ -29,7 +25,7 @@ export const createUser = async (payload: CreateUserPayload): Promise<User> => {
 };
 
 interface UpdateUserResponse {
-  message: string
+  message: string;
 }
 export const updateUser = async (
   oldEmail: string,

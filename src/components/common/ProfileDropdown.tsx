@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,26 +9,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import {
-  Avatar,
-  AvatarFallback,
-} from "../../../components/ui/avatar";
+} from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import toast from "react-hot-toast";
-import { logoutService } from "../../../services/authService";
-import type { User } from "../../../services/types";
+import { logoutService } from "../../services/auth/authService";
+import type { User } from "../../services/auth/types";
 import { useEffect, useState } from "react";
-import { getUserInfo } from "../../../services/userService";
+import LogoutButton from "./LogoutButton";
 
 export function ProfileDropdown() {
-      const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchUser = async () => {
       try {
-        const data = await getUserInfo();
-        setUser(data);
       } catch (err) {
         console.error("Failed to fetch user:", err);
       }
@@ -36,16 +31,7 @@ export function ProfileDropdown() {
     fetchUser();
   }, []);
 
-  const initials = user?.email
-    ? user.email.slice(0, 2).toUpperCase()
-    : "??";
-    
-  
-  const handleLogout = () => {
-    logoutService();
-    toast.success("Logged out successfully");
-    navigate("/login");
-  };
+  const initials = user?.email ? user.email.slice(0, 2).toUpperCase() : "??";
   return (
     <>
       <DropdownMenu modal={false}>
@@ -54,9 +40,9 @@ export function ProfileDropdown() {
             variant="outline"
             className="relative h-8 w-8  bg-gray-200 rounded-full"
           >
-        <Avatar className="h-8 w-8">
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
+            <Avatar className="h-8 w-8">
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 bg-white" align="end" forceMount>
@@ -84,11 +70,11 @@ export function ProfileDropdown() {
                 <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
               </Link>
             </DropdownMenuItem>
- 
-           </DropdownMenuGroup>
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-            <span>Sign out</span>
+          
+          <DropdownMenuItem className="cursor-pointer">
+            <span><LogoutButton/></span>
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
