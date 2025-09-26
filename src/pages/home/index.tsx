@@ -1,7 +1,6 @@
 "use client";
 
-import { Toaster } from "react-hot-toast";
-import Navbar from "../../components/common/Navbar";
+ import Navbar from "../../components/common/Navbar";
 import OverviewChart from "./components/OverviewChart";
 import ApexChart from "./components/ApexChart";
 
@@ -18,10 +17,9 @@ import ApexChart from "./components/ApexChart";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen w-full bg-primary">
+    <div className="m-h-screen w-full bg-primary overflow-y-auto">
       <Navbar>
-        <Toaster position="top-right" />
-
+ 
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6">
           <h1 className="text-2xl text-white font-semibold tracking-tight">

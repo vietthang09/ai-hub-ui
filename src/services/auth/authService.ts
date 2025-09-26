@@ -2,8 +2,7 @@ import axiosInstance from "../axiosInstance";
 import type { User } from "./types";
 import { useAuthStore } from "../../store/authStore";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
+ 
 export interface AuthUser extends User {
   email: string;
   role: string;
@@ -23,7 +22,7 @@ export const loginService = async (
   password: string
 ): Promise<AuthUser> => {
   const { data } = await axiosInstance.post<AuthUser>(
-    `${BASE_URL}/api/auth/login`,
+    `/api/auth/login`,
     {
       email,
       password,
@@ -40,7 +39,7 @@ export const registerSevice = async (
   password: string
 ): Promise<RegisterResponse> => {
   const { data } = await axiosInstance.post<RegisterResponse>(
-    `${BASE_URL}/api/auth/register`,
+    `/api/auth/register`,
     { email, password }
   );
   return data;

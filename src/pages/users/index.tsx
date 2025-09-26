@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import type { UserItem } from "../../services/auth/types";
+ import type { UserItem } from "../../services/auth/types";
 import { useUserContext } from "../../context/user-context";
 import { deleteUser, getUsers } from "../../services/auth/userService";
 import { Button } from "../../components/ui/button";
@@ -17,6 +16,7 @@ import {
   TableHead,
 } from "../../components/ui/table";
 import Pagination from "./components/Pagination";
+import toast from "react-hot-toast";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
@@ -73,8 +73,7 @@ export default function UsersPage() {
   return (
     <div className="flex h-screen w-full bg-primary">
       <Navbar>
-        <Toaster position="top-right" />
-
+ 
         <div className="flex flex-col h-full p-4">
           <div className="flex justify-between items-center -mt-4 mb-6">
             <SearchBar onSearch={setSearchQuery} />

@@ -27,8 +27,7 @@ export default function Profile() {
   return (
     <div className="h-screen flex bg-primary">
       <Navbar>
-        <Toaster position="top-right" />
-        <div className="flex-1 flex items-center text-white justify-center">
+         <div className="flex-1 flex items-center text-white justify-center">
           {loading ? (
             <p>Loading...</p>
           ) : user ? (

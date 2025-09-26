@@ -56,7 +56,6 @@ export default function Login() {
     <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card className="gap-4">
-          <Toaster position="top-right" />
           <CardHeader>
             <CardTitle className="text-lg tracking-tight">
               Login to your account

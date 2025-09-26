@@ -8,10 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
 } from "../../../components/ui/dropdown-menu";
+import { StarRating } from "../layout/rating";
 
 interface GoogleReviewProps {
   index: number;
   name: string;
+  profile_photo: string;
   date: string;
   reviews: string;
   rating: number;
@@ -22,7 +24,8 @@ interface GoogleReviewProps {
 
 export default function ReviewRow({
   index,
-   name,
+  name,
+  profile_photo,
   date,
   reviews,
   rating,
@@ -35,38 +38,33 @@ export default function ReviewRow({
       <TableCell className="px-4 py-2 text-center">{index + 1}</TableCell>
       <TableCell className="px-4 py-2 text-left">
         <div className="flex items-center gap-3">
-          {/* <img
-          src={profile_photo || "/default-avatar.png"}
-          alt="Profile"
-          className="w-8 h-8 rounded-full"
-        /> */}
+          <img
+            src={profile_photo}
+            alt="Profile"
+            className="w-8 h-8 rounded-full"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/default-avatar.png";
+            }}
+          />
 
           <span>{name}</span>
         </div>
       </TableCell>
 
-      {/* Date */}
       <TableCell className="px-4 py-2 text-center">{date}</TableCell>
 
-      {/* Reviews */}
       <TableCell className="px-4 py-2 text-left max-w-xs truncate">
-        {reviews.length > 20 ? reviews.slice(0, 20) + "..." : reviews}
+        {reviews && reviews.length > 0
+          ? reviews.length > 20
+            ? reviews.slice(0, 20) + "..."
+            : reviews
+          : "—"}
       </TableCell>
 
-      {/* Rating */}
       <TableCell className="px-4 py-2 text-center">
-        <div className="flex justify-center gap-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              size={16}
-              className={i < rating ? "text-yellow-400" : "text-gray-600"}
-            />
-          ))}
-        </div>
+        <StarRating rating={rating} />
       </TableCell>
 
-      {/* Activity */}
       <TableCell className="px-4 py-2 text-center">
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -79,7 +77,6 @@ export default function ReviewRow({
         </span>
       </TableCell>
 
-      {/* Actions */}
       <TableCell className="px-4 py-2 text-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

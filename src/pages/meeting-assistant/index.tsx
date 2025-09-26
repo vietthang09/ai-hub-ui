@@ -104,8 +104,7 @@ const data = [
   return (
     <div className="flex h-screen w-full bg-primary text-white">
       <Navbar>
-        <Toaster position="top-right" />
-        <div className="flex flex-col h-full p-6 gap-4">
+         <div className="flex flex-col h-full p-6 gap-4">
           <div className="flex items-center justify-between">
             <SearchBar onSearch={setSearchQuery} />
             <Button

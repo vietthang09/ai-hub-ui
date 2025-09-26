@@ -1,35 +1,18 @@
 import { useMemo } from "react";
 import { useReviewContext } from "../../../context/review-context";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
-import { Star } from "lucide-react";
-
-interface Review {
-  id: string;
-  reviewer: { name: string };
-  created_at: string;
-  content: string;
-  rating: number;
-  activity: "Replied" | "Pending" | string;
-  avatarUrl?: string;
-  title?: string;
-}
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../../components/ui/dialog";
+import { Ban } from "lucide-react";
+import type { Review } from "../../../services/review/types";
+import { StarRating } from "../layout/rating";
+import { Button } from "../../../components/ui/button";
 
 interface DetailReviewDialogProps {
   selectedReview: Review | null;
-}
-
-function StarRating({ value = 0, size = 18 }: { value?: number; size?: number }) {
-  return (
-    <div className="flex items-center gap-1">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star
-          key={i}
-          size={size}
-          className={i < value ? "text-yellow-400" : "text-gray-600"}
-        />
-      ))}
-    </div>
-  );
 }
 
 function ActivityBadge({ status }: { status?: string }) {
@@ -46,13 +29,17 @@ function ActivityBadge({ status }: { status?: string }) {
   );
 }
 
-export default function DetailReviewDialog({ selectedReview }: DetailReviewDialogProps) {
+export default function DetailReviewDialog({
+  selectedReview,
+}: DetailReviewDialogProps) {
   const { modalType, setModalType } = useReviewContext();
 
   const dateText = useMemo(() => {
     if (!selectedReview?.created_at) return "";
     const d = new Date(selectedReview.created_at);
-    return isNaN(d.getTime()) ? selectedReview.created_at : d.toLocaleDateString();
+    return isNaN(d.getTime())
+      ? selectedReview.created_at
+      : d.toLocaleDateString();
   }, [selectedReview?.created_at]);
 
   return (
@@ -60,24 +47,24 @@ export default function DetailReviewDialog({ selectedReview }: DetailReviewDialo
       open={modalType === "detail"}
       onOpenChange={(open) => !open && setModalType(null)}
     >
-      <DialogContent className="max-w-xl w-full bg-[#0B1220] text-slate-100 rounded-2xl p-0 overflow-hidden">
-        {/* Header */}
-        <DialogHeader className="p-5 border-b border-white/5 bg-white/5">
+      <DialogContent className="max-w-xl p-0 overflow-hidden bg-primary text-white">
+        <DialogHeader className="p-4 bg-white/5">
           <div className="flex items-center gap-4">
             <div className="h-12 w-12 rounded-full overflow-hidden ring-1 ring-white/10">
-              {selectedReview?.avatarUrl ? (
+              {selectedReview?.reviewer ? (
                 <img
-                  src={selectedReview.avatarUrl}
+                  src={selectedReview.reviewer.profile_photo}
                   alt={selectedReview.reviewer.name || "avatar"}
                   className="h-full w-full object-cover"
                 />
               ) : (
                 <div className="h-full w-full grid place-items-center bg-slate-800">
-                  <span className="text-lg">👤</span>
+                  <span className="text-lg">
+                    <Ban />
+                  </span>
                 </div>
               )}
             </div>
-
             <div className="min-w-0 flex-1">
               <DialogTitle className="text-base font-semibold text-slate-100">
                 {selectedReview?.reviewer.name || "Guest"}
@@ -88,57 +75,38 @@ export default function DetailReviewDialog({ selectedReview }: DetailReviewDialo
                 <ActivityBadge status={selectedReview?.activity} />
               </div>
             </div>
-
-            <StarRating value={selectedReview?.rating ?? 0} />
+            <div className="flex items-center gap-2 self-start md:self-auto">
+              <div className="px-3 py-1 rounded-full bg-white/30 backdrop-blur-sm">
+                <StarRating rating={selectedReview?.rating ?? 0} />
+              </div>
+            </div>{" "}
           </div>
         </DialogHeader>
 
-        {/* Body */}
-        <div className="p-5">
-          {selectedReview ? (
-            <div className="space-y-5">
-               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="space-y-1">
-                  <div className="text-slate-400">Title</div>
-                  <div className="font-medium">
-                    {selectedReview.title || "—"}
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-slate-400">Rating</div>
-                  <div className="font-medium">{selectedReview.rating}/5</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-slate-400 mb-1">Status</div>
-                  <ActivityBadge status={selectedReview.activity} />
-                </div>
-                <div className="space-y-1">
-                  <div className="text-slate-400">Date</div>
-                  <div className="font-medium">{dateText || "—"}</div>
-                </div>
-              </div>
-
-              {/* Review content */}
-              <div className="rounded-xl bg-white/[0.03] ring-1 ring-white/10 p-4 relative">
-                <div className="absolute -top-3 left-4 text-2xl">“</div>
-                <p className="leading-relaxed text-slate-200 whitespace-pre-line">
+        <div className="p-5 space-y-6">
+          <section className="rounded-2xl bg-white/10 shadow-inner p-4">
+            <div className="text-xs uppercase tracking-wide text-white/50 mb-2">
+              Reviewer Comment
+            </div>
+            <div className="max-h-80 overflow-auto pr-1">
+              {selectedReview?.content ? (
+                <p className="leading-relaxed whitespace-pre-line">
                   {selectedReview.content}
                 </p>
-              </div>
+              ) : (
+                <p className="text-center text-white/50">No review selected</p>
+              )}
             </div>
-          ) : (
-            <p className="text-center text-slate-400">No review selected</p>
-          )}
+          </section>
         </div>
 
-        {/* Footer */}
-        <div className="px-5 pb-5 pt-3 flex justify-end gap-2 bg-white/5 border-t border-white/5">
-          <button
+        <div className="px-5 pb-5 pt-3 flex justify-end gap-2 bg-white/5">
+          <Button
             onClick={() => setModalType(null)}
             className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition"
           >
             Close
-          </button>
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

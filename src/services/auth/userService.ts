@@ -1,10 +1,9 @@
 import axiosInstance from "../axiosInstance";
 import type { CreateUserPayload, UpdateUserPayload, User } from "./types";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
+ 
 export const getUsers = async (): Promise<User[]> => {
-  const { data } = await axiosInstance.get<User[]>(`${BASE_URL}/admin/users`);
+  const { data } = await axiosInstance.get<User[]>(`/admin/users`);
   return data;
 };
 
@@ -12,7 +11,7 @@ export const getUsers = async (): Promise<User[]> => {
 export const createUser = async (payload: CreateUserPayload): Promise<User> => {
   try {
     const { data } = await axiosInstance.post<User>(
-      `${BASE_URL}/admin/users`,
+      `/admin/users`,
       payload
     );
     return data;
@@ -32,7 +31,7 @@ export const updateUser = async (
   payload: { role?: string }
 ): Promise<UpdateUserResponse> => {
   const { data } = await axiosInstance.put<UpdateUserResponse>(
-    `${BASE_URL}/admin/user/${encodeURIComponent(oldEmail)}`,
+    `/admin/user/${encodeURIComponent(oldEmail)}`,
     payload
   );
   return data;
@@ -40,6 +39,6 @@ export const updateUser = async (
 
 export const deleteUser = async (email: string): Promise<void> => {
   await axiosInstance.delete(
-    `${BASE_URL}/admin/user/${encodeURIComponent(email)}`
+    `/admin/user/${encodeURIComponent(email)}`
   );
 };

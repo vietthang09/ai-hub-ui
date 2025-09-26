@@ -49,8 +49,7 @@ export default function Register() {
     <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card className="gap-4">
-          <Toaster position="top-right" />
-          <CardHeader>
+           <CardHeader>
             <CardTitle className="text-lg tracking-tight">
               Create an account
             </CardTitle>

@@ -13,8 +13,7 @@ import Pagination from "../users/components/Pagination";
 import ReviewRow from "./componets/ReviewRow";
 import ReviewDialog from "./componets/ReviewDialog";
 import { useReviewContext } from "../../context/review-context";
-
-import { getReviews } from "../../services/review/reviewService"; // import từ service
+import { getReviews, pullReviews } from "../../services/review/reviewService";
 import type { Review } from "../../services/review/types";
 import { Button } from "../../components/ui/button";
 import { GitPullRequestArrow } from "lucide-react";
@@ -25,6 +24,7 @@ export default function GoogleReviewPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { modalType, setModalType } = useReviewContext();
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [selectedRely, setSelectedRely] = useState<any | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -33,7 +33,8 @@ export default function GoogleReviewPage() {
     setLoading(true);
     try {
       const data = await getReviews();
-      setReviews(data);
+      setReviews(data.reviews);
+      // console.log("API reviews:", data.reviews);
     } catch (err: any) {
       toast.error(err?.message || "Failed to fetch reviews");
     } finally {
@@ -45,9 +46,23 @@ export default function GoogleReviewPage() {
     fetchReviews();
   }, []);
 
+  const handlePullReviews = async () => {
+    try {
+      setLoading(true);
+      await pullReviews();
+      toast.success("Pulled reviews successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to pull reviews");
+    } finally {
+      setLoading(false);
+    }
+  };
+ 
+
   // Filter by name
   const filteredReviews = reviews.filter((r) =>
-    r.name.toLowerCase().includes(searchQuery.toLowerCase())
+    r.reviewer.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const indexLastItem = currentPage * itemsPerPage;
@@ -61,17 +76,18 @@ export default function GoogleReviewPage() {
   return (
     <div className="flex h-screen w-full bg-primary">
       <Navbar>
-        <Toaster position="top-right" />
 
         <div className="flex flex-col h-full p-4">
           <div className="flex justify-between items-center -mt-4 mb-6">
             <SearchBar onSearch={setSearchQuery} />
             <Button
-              variant={"outline"}
-              className="flex items-center gap-2 px-6 py-4 rounded-lg border border-gray-700 text-white hover:bg-gray-500 transition"
-              // onClick={() => }
+              variant={"default"}
+              className="flex items-center gap-2 px-6 py-4 rounded-lg border border-gray-700 text-white hover:bg-cyan-900 transition"
+              onClick={handlePullReviews}
+              disabled={loading}
             >
-              <span>Pull Reviews</span> <GitPullRequestArrow size={18} />
+              <span>{loading ? "Pulling..." : "Pull Reviews"}</span>
+              <GitPullRequestArrow size={18} />
             </Button>
           </div>
 
@@ -109,16 +125,24 @@ export default function GoogleReviewPage() {
                       <ReviewRow
                         key={r.external_id}
                         index={index}
-                        name={r.name}
+                        profile_photo={
+                          r.reviewer.profile_photo || "/default-avatar.png"
+                        }
+                        name={r.reviewer.name}
                         date={new Date(r.created_at).toLocaleDateString()}
                         reviews={r.content}
                         rating={r.rating}
-                        activity={"Not reply"}
+                        activity={r.activity ? "Not reply" : "Replied"}
                         onDetail={() => {
                           setSelectedReview(r);
                           setModalType("detail");
                         }}
-                        onRely={() => setModalType("reply")}
+                        onRely={() => 
+                        {
+                          setSelectedRely(r);
+                          setModalType("reply");
+                        }                        
+                        }
                       />
                     ))}
                   </TableBody>
@@ -136,7 +160,10 @@ export default function GoogleReviewPage() {
             )}
           </div>
         </div>
-        <ReviewDialog selectedReview={selectedReview} />
+      <ReviewDialog
+  selectedReview={selectedReview}
+  selectedRely={selectedRely}
+/>
       </Navbar>
     </div>
   );

@@ -15,6 +15,7 @@ import { SidebarContent, SidebarFooter, SidebarHeader } from "../ui/sidebar";
 import { useState } from "react";
 import { cn } from "../../lib/utils";
 import { ProfileDropdown } from "./ProfileDropdown";
+import { Toaster } from "react-hot-toast";
 
 type NavItem = {
   label: string;
@@ -131,6 +132,7 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
       {/* Main content */}
       <div className="flex-1 transition-all duration-300">
         <header className="flex items-center justify-between p-3 relative">
+ 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setCollapsed(!collapsed)}

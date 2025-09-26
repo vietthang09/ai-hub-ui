@@ -12,6 +12,7 @@ import BookingPulse from "./pages/booking-pulse/index.tsx";
 import MeetingAssistant from "./pages/meeting-assistant/index.tsx";
 import { MeetingProvider } from "./context/meeting-context.tsx";
 import { ChatBox } from "./pages/chat-bot/index.tsx";
+import { Toaster } from "react-hot-toast";
   
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
       <ReviewProvider>
         <MeetingProvider>
         <BrowserRouter>
-
+          <Toaster position="top-right" />
           <Routes>
             {/* Guest routes */}
             <Route
