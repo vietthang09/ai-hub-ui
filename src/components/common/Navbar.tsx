@@ -15,7 +15,6 @@ import { SidebarContent, SidebarFooter, SidebarHeader } from "../ui/sidebar";
 import { useState } from "react";
 import { cn } from "../../lib/utils";
 import { ProfileDropdown } from "./ProfileDropdown";
-import { Toaster } from "react-hot-toast";
 
 type NavItem = {
   label: string;
@@ -38,17 +37,28 @@ const Icons: Record<string, React.ElementType> = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Home", to: "/home" },
-  { label: "Profile", to: "/profile" },
-  { label: "Users", to: "/users" },
-  { label: "Booking Pulse", to: "/booking-pulse" },
-  { label: "Persona Finder", soon: true },
-  { label: "Dynamic Pricing", soon: true },
-  { label: "SEO Optimization", soon: true },
-  { label: "Meeting Assistant", to: "/meeting-assistant" },
-  { label: "Chat Bot", to: "/chat-bot" },
-  { label: "Google Review", to: "/google-review" },
+  {
+    label: "General",
+    children: [
+      { label: "Home", to: "/home" },
+      { label: "Profile", to: "/profile" },
+      { label: "Users", to: "/users" },
+    ],
+  },
+  {
+    label: "AI",
+    children: [
+      { label: "Booking Pulse", to: "/booking-pulse" },
+      { label: "Persona Finder", soon: true },
+      { label: "Dynamic Pricing", soon: true },
+      { label: "SEO Optimization", soon: true },
+      { label: "Meeting Assistant", to: "/meeting-assistant" },
+      { label: "Chat Bot", to: "/chat-bot" },
+      { label: "Google Review", to: "/google-review" },
+    ],
+  },
 ];
+
 
 export default function Navbar({ children }: { children?: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -96,13 +106,23 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
     );
   };
 
-  const Tree = ({ items }: { items: NavItem[] }) => (
-    <div className="space-y-1">
-      {items.map((item) => (
-        <Leaf key={item.label} item={item} />
-      ))}
-    </div>
-  );
+const Tree = ({ items }: { items: NavItem[] }) => (
+  <div className="space-y-4">
+    {items.map((group) => (
+      <div key={group.label}>
+        <div className="px-3 py-1 text-xs font-semibold uppercase text-gray-400">
+          {group.label}
+        </div>
+        <div className="space-y-1 mt-1">
+          {group.children?.map((item) => (
+            <Leaf key={item.label} item={item} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 
   return (
     <div className="flex h-screen w-full overflow-hidden">

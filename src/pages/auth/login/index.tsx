@@ -80,12 +80,6 @@ export default function Login() {
               <div className="grid gap-2 relative -mt-4">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
                 <div className="relative">
                   <Input
@@ -125,15 +119,6 @@ export default function Login() {
                 Or continue with
               </span>
               <div className="flex-grow h-px bg-gray-300"></div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" type="button">
-                <Github className="h-4 w-4" /> GitHub
-              </Button>
-              <Button variant="outline" type="button">
-                <Facebook className="h-4 w-4" /> Facebook
-              </Button>
             </div>
             <Link
               to="/register"
