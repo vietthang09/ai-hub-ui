@@ -10,12 +10,6 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      "/api": {
-        target: "http://192.168.77.89:5000",
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+    port: 65535,
+  }
 });
